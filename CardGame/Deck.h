@@ -20,6 +20,7 @@ public:
 
 	void setDefaultDeck();
 
+	bool checkForColor(int color);
 	void addCard(Card* newCard);	//Adds Card to the vector
 	bool shuffle();	//Randomizes position of Cards in the vector
 	Card * throwCard(int id);	//Removes Card from the vector with id

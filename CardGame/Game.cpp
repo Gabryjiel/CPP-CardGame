@@ -42,15 +42,42 @@ void Game::startRound() {
 	
 }
 
+int Game::cardSelector(int player) {
+	int selection;
+	if (this->player[player].getAI() != 0)
+		selection = ai->selectCard(player);
+	else {
+		bool check;
+		do {
+			check = false;;
+			selection = console->selectCard(player);
+			if (deck.size() != 0) {
+				int topColor = getDeck()[0]->getColor();
+				if (this->player[player].getDeck()[selection]->getColor() != topColor) {
+					if (!this->player[player].checkForColor(topColor)) {//Brak koloru
+						if (this->player[player].checkForColor(this->triumph->getColor())) {//Jest triumf
+							if (this->player[player].getDeck()[selection]->getColor() != triumph->getColor()) {
+								//ERROR
+								check = true;
+							}
+						}
+					}
+					else {//Jest kolor
+						if (this->player[player].getDeck()[selection]->getColor() != topColor) {
+							//ERROR
+							check = true;
+						}
+					}
+				}
+			}
+		} while (check);
+	}
+	return selection;
+}
+
 void Game::singleRound() {
 	for (int i = roundWinner; getDeckSize() != numberOfPlayers;) {
-		if (player[i].getAI() == 0) {
-			addCard(player[i].throwCard(console->selectCard(i)));
-		}
-		else {
-			addCard(player[i].throwCard(0));
-		}
-
+		addCard(player[i].throwCard(cardSelector(i)));
 		console->displayStart();
 		console->displayTable();
 

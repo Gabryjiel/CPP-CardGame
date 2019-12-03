@@ -19,6 +19,8 @@ private:
 	//Sets up "mainDeck", players "hand" and "triumph"
 	void startRound();
 
+	int cardSelector(int player);
+
 	//Sums up the round
 	//Clears players "deck", "collected" and "table", decrements "round",
 	void endRound();

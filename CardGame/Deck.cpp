@@ -39,6 +39,14 @@ void Deck::setDefaultDeck() {
 		deck[i] = &allDeck[i];
 }
 
+bool Deck::checkForColor(int color){
+	for (int i = 0; i < deck.size(); i++) {
+		if (deck[i]->getColor() == color)
+			return true;
+	}
+	return false;
+}
+
 void Deck::addCard(Card* newCard) {
 	this->deck.push_back(newCard);
 }

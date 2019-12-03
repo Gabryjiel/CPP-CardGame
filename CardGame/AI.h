@@ -6,6 +6,6 @@ private:
 
 public:
 	int declare(int aiLevel);
-	int selectCard(Deck deck);
+	int selectCard(int player);
 
 };
