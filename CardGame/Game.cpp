@@ -102,7 +102,7 @@ void Game::sumUpRound() {
 
 		if (cardValue > max) {
 			max = cardValue;
-			roundWinner = i;
+			roundWinner = (roundWinner + i) % numberOfPlayers;
 		}
 		
 	}
