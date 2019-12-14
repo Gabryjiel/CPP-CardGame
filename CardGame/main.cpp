@@ -1,13 +1,12 @@
 #include <iostream>
-#include "Game.h"
+//#include "Game.h"
 //#include "Graphics.h"
+#include "GInterface.h"
 
 int main(){
-	//Game game.start();
-	do {
-		Game game;
-		game.start();
-	} while (0);
+	
+	GInterface in;
+	in.start();
 
 	return 0;
 }
