@@ -29,6 +29,7 @@ void Game::startRound() {
 	for (int i = 0; i < numberOfPlayers; i++)
 		player[i].sortDeck();
 	
+	console2->displayStart();
 	console->displayStart();
 	console->displayTriumph(triumph);
 

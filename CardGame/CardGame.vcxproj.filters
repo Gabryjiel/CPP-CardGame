@@ -39,10 +39,16 @@
     <ClCompile Include="AI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GInterface.cpp">
+    <ClCompile Include="Button.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Button.cpp">
+    <ClCompile Include="GameInterface.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuInterface.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="GCard.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,10 +71,16 @@
     <ClInclude Include="AI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GInterface.h">
+    <ClInclude Include="Button.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Button.h">
+    <ClInclude Include="GameInterface.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuInterface.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="GCard.h">
       <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>

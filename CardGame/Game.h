@@ -1,7 +1,9 @@
 #pragma once
+#include "GameInterface.h"
 #include "Player.h"
 #include "Interface.h"
 #include "AI.h"
+
 
 class Game : protected Deck{
 private:
@@ -11,8 +13,9 @@ private:
 
 	Player* player;
 	Card* triumph;
-	Interface* console;
+	Interface* console2;
 	AI* ai;
+	GameInterface* console;
 	
 
 	//Sets up the round
@@ -41,7 +44,8 @@ public:
 
 		player[0].setAI(false);
 		roundWinner = 0;
-		console = new Interface(player, &deck, triumph, nOP);
+		console2 = new Interface(player, &deck, triumph, nOP);
+		console = new GameInterface(player, &deck, triumph, nOP);
 	};
 	~Game();
 	

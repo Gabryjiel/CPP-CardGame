@@ -1,14 +1,13 @@
 #pragma once
-#include "Player.h"
 #include "Button.h"
 
-class GInterface {
+class MenuInterface {
 	sf::RenderWindow window;
 	Button temp;
 
 	void menu();
 public:
-	GInterface();
+	MenuInterface();
 	void start();
 	
 };

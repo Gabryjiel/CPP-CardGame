@@ -132,7 +132,9 @@
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="Deck.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GInterface.cpp" />
+    <ClCompile Include="GameInterface.cpp" />
+    <ClCompile Include="GCard.cpp" />
+    <ClCompile Include="MenuInterface.cpp" />
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -143,7 +145,9 @@
     <ClInclude Include="Card.h" />
     <ClInclude Include="Deck.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="GInterface.h" />
+    <ClInclude Include="GameInterface.h" />
+    <ClInclude Include="GCard.h" />
+    <ClInclude Include="MenuInterface.h" />
     <ClInclude Include="Interface.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
