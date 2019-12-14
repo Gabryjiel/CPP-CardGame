@@ -17,5 +17,7 @@ public:
 	void setOutlineThickness(float size);
 	void setOutlineColor(sf::Color color);
 	void setBackgroundColor(sf::Color color);
+	
+	bool isOn(float x, float y);
 };
 

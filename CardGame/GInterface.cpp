@@ -8,20 +8,7 @@ GInterface::GInterface() {
 }
 
 void GInterface::start() {
-
-	
-	while (window.isOpen())
-	{
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				window.close();
-		}
-		menu();
-		window.display();
-	}
-
+	menu();
 }
 
 void GInterface::menu() {
@@ -37,10 +24,44 @@ void GInterface::menu() {
 	for (int i = 0; i < 4; i++) {
 		mainMenu[i].setSize(50, 200);
 		mainMenu[i].setOutlineThickness(4);
-		mainMenu[i].setOutlineColor(sf::Color::Blue);
-		mainMenu[i].setBackgroundColor(sf::Color::Blue);
+		mainMenu[i].setOutlineColor(sf::Color(0, 53, 138));
+		mainMenu[i].setBackgroundColor(sf::Color(0, 53, 138));
 		mainMenu[i].setFormating(2, 1);
 		mainMenu[i].setPosition(0, 10 + i * 70);
 		window.draw(mainMenu[i]);
+	}
+	window.display();
+	while (window.isOpen()){
+		
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				window.close();
+			if (event.type == sf::Event::MouseButtonPressed) {
+				if (event.mouseButton.button == sf::Mouse::Left) {
+					for (int i = 0; i < 4; i++) {
+						if (mainMenu[i].isOn(event.mouseButton.x, event.mouseButton.y)) {
+							mainMenu[i].setBackgroundColor(sf::Color(0, 76, 199));
+							mainMenu[i].setOutlineColor(sf::Color(0, 76, 199));
+						}
+						window.draw(mainMenu[i]);
+					}
+					window.display();
+				}
+			}
+			if (event.type == sf::Event::MouseButtonReleased) {
+				if (event.mouseButton.button == sf::Mouse::Left) {
+					for (int i = 0; i < 4; i++) {
+						mainMenu[i].setBackgroundColor(sf::Color(0, 53, 138));
+						mainMenu[i].setOutlineColor(sf::Color(0, 53, 138));
+						window.draw(mainMenu[i]);
+					}
+					window.display();
+
+				}
+			}
+		}
+		
 	}
 }

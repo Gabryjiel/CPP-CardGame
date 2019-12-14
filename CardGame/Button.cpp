@@ -71,3 +71,7 @@ void Button::setOutlineColor(sf::Color color) {
 void Button::setBackgroundColor(sf::Color color) {
 	background.setFillColor(color);
 }
+
+bool Button::isOn(float x, float y) {
+	return background.getGlobalBounds().contains(x, y);
+}
