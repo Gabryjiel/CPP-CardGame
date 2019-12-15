@@ -12,4 +12,5 @@ public:
 	sf::FloatRect getSize();
 	void setPosition(float x, float y);
 	void setPosition(sf::Vector2f vec);
+	void scale(float x, float y);
 };

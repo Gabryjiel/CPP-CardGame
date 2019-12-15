@@ -3,7 +3,7 @@
 
 GameInterface::GameInterface(Player* player, std::vector<Card*> *table, Card* triumph, int nOP){
 	window.create(sf::VideoMode(1280, 720), "My window");
-
+	window.clear(BACKGROUNDCOLOR);
 	this->cards = new GCard[52];
 	this->player = player;
 	this->table = table;
@@ -13,6 +13,24 @@ GameInterface::GameInterface(Player* player, std::vector<Card*> *table, Card* tr
 	
 	loadCards(); 
 	setPositions();
+	window.display();
+	sf::RenderTexture test;
+	test.create(100, 500);
+
+	sf::RectangleShape pro(sf::Vector2f(20,30));
+	pro.setFillColor(sf::Color::Red);
+	test.clear();
+	test.draw(pro);
+	test.display();
+	
+	sf::Sprite spri(test.getTexture());
+	window.draw(spri);
+	window.display();
+	pro.setFillColor(sf::Color::Blue);
+	test.draw(pro);
+	test.display();
+	window.display();
+	window.display();
 }
 
 GameInterface::~GameInterface() {
@@ -101,6 +119,10 @@ void GameInterface::setPositions() {
 	}
 }
 
+void GameInterface::display(){
+	window.display();
+}
+
 void GameInterface::loadCards() {
 	
 	for (int i = 0; i < 52; i++) {
@@ -130,7 +152,6 @@ void GameInterface::loadCards() {
 }
 
 void GameInterface::displayStart(){
-	window.clear(BACKGROUNDCOLOR);
 
 	for (int i = 0; i < numberOfPlayers; i++) {
 		std::vector <Card*> deck = player[i].getDeck();
@@ -139,11 +160,24 @@ void GameInterface::displayStart(){
 			window.draw(cards[deck[j]->getId()]);
 		}
 	}
-	window.display();
 }
 
-void GameInterface::displayTriumph(Card* triumph)
-{
+void GameInterface::displayTriumph(Card* triumph){
+	cards[triumph->getId()].scale(2, 2);
+	cards[triumph->getId()].setPosition(window.getSize().x/2 - cards[triumph->getId()].getSize().width/2,
+		window.getSize().y/2 - cards[triumph->getId()].getSize().height/2);
+	
+
+	sf::RectangleShape opacity;
+	opacity.setSize(sf::Vector2f(cards[triumph->getId()].getSize().width, cards[triumph->getId()].getSize().height));
+	opacity.setPosition(window.getSize().x / 2 - cards[triumph->getId()].getSize().width / 2,
+		window.getSize().y / 2 - cards[triumph->getId()].getSize().height / 2);
+	opacity.setFillColor(sf::Color(44, 89, 56, 170));
+
+	window.draw(cards[triumph->getId()]);
+	window.draw(opacity);
+//	window.display();
+	cards[triumph->getId()].scale(0.5, 0.5);
 }
 
 void GameInterface::displayResult()

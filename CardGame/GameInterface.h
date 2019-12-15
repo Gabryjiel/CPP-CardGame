@@ -35,6 +35,6 @@ public:
 	int declare(int round);
 	void loadCards();
 	void setPositions();
-
+	void display();
 };
 

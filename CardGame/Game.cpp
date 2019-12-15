@@ -18,7 +18,7 @@ void Game::start() {
 
 void Game::startRound() {
 	this->setDefaultDeck();
-	//this->mainDeck.shuffle();
+	this->shuffle();
 
 	for (int i = 0; i < round * numberOfPlayers; i++) {
 		player[i % numberOfPlayers].addCard(throwCard(0));
@@ -30,8 +30,10 @@ void Game::startRound() {
 		player[i].sortDeck();
 	
 	console2->displayStart();
-	console->displayStart();
 	console->displayTriumph(triumph);
+	console->displayStart();
+	console->display();
+	
 
 	for (int i = 0; i < this->numberOfPlayers; i++) {
 		int aiLevel = this->player[i].getAI();

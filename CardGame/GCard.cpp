@@ -25,3 +25,7 @@ void GCard::setPosition(float x, float y){
 void GCard::setPosition(sf::Vector2f vec) {
 	sprite.setPosition(vec);
 }
+
+void GCard::scale(float x, float y){
+	sprite.scale(x, y);
+}
