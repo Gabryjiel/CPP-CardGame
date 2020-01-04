@@ -130,6 +130,7 @@
     <ClCompile Include="AI.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Card.cpp" />
+    <ClCompile Include="Controller.cpp" />
     <ClCompile Include="Deck.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameInterface.cpp" />
@@ -143,6 +144,7 @@
     <ClInclude Include="AI.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Card.h" />
+    <ClInclude Include="Controller.h" />
     <ClInclude Include="Deck.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameInterface.h" />

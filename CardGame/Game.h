@@ -4,9 +4,9 @@
 #include "Interface.h"
 #include "AI.h"
 
-
-class Game : protected Deck{
-private:
+class Game : public Deck{
+	friend class Controller;
+	//friend Controller::Controller();
 	int round; 
 	int roundWinner;
 	const int numberOfPlayers;
@@ -50,6 +50,5 @@ public:
 	~Game();
 	
 	void start();
-
 };
 

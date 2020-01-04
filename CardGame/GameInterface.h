@@ -36,5 +36,6 @@ public:
 	void loadCards();
 	void setPositions();
 	void display();
+	bool getEvent(sf::Event event);
 };
 

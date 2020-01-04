@@ -5,83 +5,87 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="Controller">
+      <UniqueIdentifier>{53713b15-be22-43be-8854-749d04865e2c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Model">
+      <UniqueIdentifier>{d591ec99-d8aa-4c0f-a1df-84fe0895d50d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics">
+    <Filter Include="View">
       <UniqueIdentifier>{b120eb1f-8ecf-4f7e-b109-17270c064e04}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Card.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Button.cpp">
+      <Filter>View</Filter>
     </ClCompile>
-    <ClCompile Include="Deck.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="GameInterface.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuInterface.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="GCard.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Model</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Deck.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Card.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="AI.cpp">
+      <Filter>Model</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Interface.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>View</Filter>
     </ClCompile>
-    <ClCompile Include="AI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="GameInterface.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="MenuInterface.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="GCard.cpp">
-      <Filter>Graphics</Filter>
+    <ClCompile Include="Controller.cpp">
+      <Filter>Controller</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Card.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Deck.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Interface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Button.h">
-      <Filter>Graphics</Filter>
+      <Filter>View</Filter>
     </ClInclude>
     <ClInclude Include="GameInterface.h">
-      <Filter>Graphics</Filter>
+      <Filter>View</Filter>
     </ClInclude>
     <ClInclude Include="MenuInterface.h">
-      <Filter>Graphics</Filter>
+      <Filter>View</Filter>
     </ClInclude>
     <ClInclude Include="GCard.h">
-      <Filter>Graphics</Filter>
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="AI.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Card.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Deck.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller.h">
+      <Filter>Controller</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

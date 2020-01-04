@@ -123,6 +123,10 @@ void GameInterface::display(){
 	window.display();
 }
 
+bool GameInterface::getEvent(sf::Event event){
+	return window.pollEvent(event);
+}
+
 void GameInterface::loadCards() {
 	
 	for (int i = 0; i < 52; i++) {
