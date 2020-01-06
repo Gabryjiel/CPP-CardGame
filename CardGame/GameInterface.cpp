@@ -1,36 +1,16 @@
 #include "GameInterface.h"
 #include <Windows.h>
 
-GameInterface::GameInterface(Player* player, std::vector<Card*> *table, Card* triumph, int nOP){
-	window.create(sf::VideoMode(1280, 720), "My window");
-	window.clear(BACKGROUNDCOLOR);
+GameInterface::GameInterface(GameSettings& settings, Player* player, std::vector<Card*> *table, int nOP){
+	this->settings = &settings;
+	this->window = settings.window;
 	this->cards = new GCard[52];
 	this->player = player;
 	this->table = table;
-	this->triumph = triumph;
 	this->numberOfPlayers = nOP;
 	this->positions = new Position[numberOfPlayers];
-	
-	loadCards(); 
-	setPositions();
-	window.display();
-	sf::RenderTexture test;
-	test.create(100, 500);
 
-	sf::RectangleShape pro(sf::Vector2f(20,30));
-	pro.setFillColor(sf::Color::Red);
-	test.clear();
-	test.draw(pro);
-	test.display();
-	
-	sf::Sprite spri(test.getTexture());
-	window.draw(spri);
-	window.display();
-	pro.setFillColor(sf::Color::Blue);
-	test.draw(pro);
-	test.display();
-	window.display();
-	window.display();
+	loadCards();
 }
 
 GameInterface::~GameInterface() {
@@ -39,14 +19,14 @@ GameInterface::~GameInterface() {
 
 sf::Vector2f gap_front_big(int cardNr, int size, sf::FloatRect CSize, sf::Vector2f input) {
 	sf::Vector2f temp(input);
-	if (size % 2 == 0) temp.x += (-(size / 2) + 1.0 * cardNr + 0.5) * CSize.width;
+	if (size % 2 == 0) temp.x += float((-(size / 2) + 1.0 * cardNr + 0.5) * CSize.width);
 	else temp.x += (-(size / 2) + cardNr) * CSize.width;
 	
 	return temp;
 }
 
 sf::Vector2f gap_front_small(int cardNr, int size, sf::FloatRect CSize, sf::Vector2f input) {
-	if (size % 2 == 0) input.x += (-(size / 2) + 1.0 * cardNr + 0.5) * (CSize.width/2);
+	if (size % 2 == 0) input.x += float((-(size / 2) + 1.0 * cardNr + 0.5) * (CSize.width/2));
 	else input.x += (-(size / 2) + cardNr) * (CSize.width/2);
 	return input;
 }
@@ -65,7 +45,7 @@ sf::Vector2f gap_side_small(int cardNr, int size, sf::FloatRect CSize, sf::Vecto
 
 void GameInterface::setPositions() {
 	sf::Vector2f pos1, pos2, pos3, pos4, pos5, pos6, pos7, pos8, pos9, pos10;
-	float x = window.getSize().x, y = window.getSize().y;
+	float x = float(window->getSize().x), y = float(window->getSize().y);
 	pos1 = { x / 2 - cards->getSize().width/2 , y - cards->getSize().height};
 	pos2 = { x, y * (2/3)};
 	pos3 = { x - cards->getSize().width, y / 2};
@@ -120,11 +100,7 @@ void GameInterface::setPositions() {
 }
 
 void GameInterface::display(){
-	window.display();
-}
-
-bool GameInterface::getEvent(sf::Event event){
-	return window.pollEvent(event);
+	window->display();
 }
 
 void GameInterface::loadCards() {
@@ -155,32 +131,36 @@ void GameInterface::loadCards() {
 	}
 }
 
-void GameInterface::displayStart(){
+void GameInterface::drawBackground() {
+	window->clear(sf::Color(settings->backgroundColor[0], settings->backgroundColor[1], settings->backgroundColor[2]));
+}
 
+void GameInterface::displayStart(){
+	drawBackground();
 	for (int i = 0; i < numberOfPlayers; i++) {
 		std::vector <Card*> deck = player[i].getDeck();
 		for (unsigned int j = 0; j < deck.size(); j++) {
 			cards[deck[j]->getId()].setPosition(positions[i].gap(j, deck.size(), cards->getSize(), positions[i].hand));
-			window.draw(cards[deck[j]->getId()]);
+			window->draw(cards[deck[j]->getId()]);
 		}
 	}
+	window->display();
 }
 
 void GameInterface::displayTriumph(Card* triumph){
 	cards[triumph->getId()].scale(2, 2);
-	cards[triumph->getId()].setPosition(window.getSize().x/2 - cards[triumph->getId()].getSize().width/2,
-		window.getSize().y/2 - cards[triumph->getId()].getSize().height/2);
+	cards[triumph->getId()].setPosition(window->getSize().x/2 - cards[triumph->getId()].getSize().width/2,
+		window->getSize().y/2 - cards[triumph->getId()].getSize().height/2);
 	
 
 	sf::RectangleShape opacity;
 	opacity.setSize(sf::Vector2f(cards[triumph->getId()].getSize().width, cards[triumph->getId()].getSize().height));
-	opacity.setPosition(window.getSize().x / 2 - cards[triumph->getId()].getSize().width / 2,
-		window.getSize().y / 2 - cards[triumph->getId()].getSize().height / 2);
+	opacity.setPosition(window->getSize().x / 2 - cards[triumph->getId()].getSize().width / 2,
+		window->getSize().y / 2 - cards[triumph->getId()].getSize().height / 2);
 	opacity.setFillColor(sf::Color(44, 89, 56, 170));
 
-	window.draw(cards[triumph->getId()]);
-	window.draw(opacity);
-//	window.display();
+	window->draw(cards[triumph->getId()]);
+	window->draw(opacity);
 	cards[triumph->getId()].scale(0.5, 0.5);
 }
 
@@ -204,4 +184,18 @@ int GameInterface::selectCard(int player)
 int GameInterface::declare(int round)
 {
 	return 0;
+}
+
+bool GameInterface::checkEvent(sf::Event& event) {
+	return window->pollEvent(event);
+}
+
+sf::String GameInterface::checkCoords(sf::Vector2u* codes){
+	for (int i = 0; i < 52; i++) {
+		if (cards[i].getGlobalBounds().contains(float(codes->x), float(codes->y))) {
+			codes->x = codes->y = i;
+			return "ThrowCard";
+		}
+	}
+	return "";
 }

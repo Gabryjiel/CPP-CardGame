@@ -9,7 +9,7 @@ class Button : public sf::Drawable{
 public:
 	Button(const char* newString = "");
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	
+
 	void setText(sf::String newString);
 	void setPosition(float x, float y);
 	void setFormating(int hFormat, int vFormat);

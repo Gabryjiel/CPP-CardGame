@@ -1,12 +1,10 @@
-#include <iostream>
-#include "Game.h"
-#include "MenuInterface.h"
+#include "Controller.h"
 
 
 int main(){
 	
-	Game game;
-	game.start();
+	Controller controller;
+	controller.startGame();
 
 	return 0;
 }

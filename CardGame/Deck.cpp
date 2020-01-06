@@ -40,7 +40,7 @@ void Deck::setDefaultDeck() {
 }
 
 bool Deck::checkForColor(int color){
-	for (int i = 0; i < deck.size(); i++) {
+	for (int i = 0; i < int(deck.size()); i++) {
 		if (deck[i]->getColor() == color)
 			return true;
 	}

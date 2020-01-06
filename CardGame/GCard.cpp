@@ -11,7 +11,7 @@ void GCard::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 void GCard::loadImage(sf::String path) {
 	image.loadFromFile(path);
 	sprite.setTexture(image);
-	sprite.scale(0.2, 0.2);
+	sprite.scale(float(0.2), float(0.2));
 }
 
 sf::FloatRect GCard::getSize(){

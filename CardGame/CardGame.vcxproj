@@ -131,12 +131,14 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="GameController.cpp" />
+    <ClCompile Include="MenuController.cpp" />
     <ClCompile Include="Deck.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameInterface.cpp" />
     <ClCompile Include="GCard.cpp" />
     <ClCompile Include="MenuInterface.cpp" />
-    <ClCompile Include="Interface.cpp" />
+    <ClCompile Include="ConsoleView.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
@@ -145,12 +147,16 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="Controller.h" />
+    <ClInclude Include="GameController.h" />
+    <ClInclude Include="GameSettings.h" />
+    <ClInclude Include="Interface.h" />
+    <ClInclude Include="MenuController.h" />
     <ClInclude Include="Deck.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameInterface.h" />
     <ClInclude Include="GCard.h" />
     <ClInclude Include="MenuInterface.h" />
-    <ClInclude Include="Interface.h" />
+    <ClInclude Include="ConsoleView.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

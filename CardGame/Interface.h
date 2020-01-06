@@ -1,31 +1,20 @@
 #pragma once
-#include <Windows.h>
-#include "Player.h"
+#include "SFML/Graphics.hpp"
+#include "Button.h"
 
-class Interface {
-private:
-	Player* player;
-	std::vector <Card*>* table;
-	Card* triumph;
-	int numberOfPlayers;
-
-	void setCursor(int x, int y);
-	int prepareConsole();
-	void cursorDown();
-	void printCard(const Card* card);
-	void printDeck(const std::vector<Card*> deck);
-	void printDeck(const std::vector <Card*>* deck);
+class Interface{
+protected:
+	sf::RenderWindow* window;
+	std::vector <Button> options;
 
 public:
-	Interface(Player* player, std::vector<Card*> *table, Card* triumph, int nOP = 0);
-	int selectCard(int player);
+	Interface() {
+		window = new sf::RenderWindow();
+		window->create(sf::VideoMode(640, 800), "Planowanie");
+	}
 
-	void displayStart();
-	void displayTriumph(Card* triumph);
-	void displayResult();
-	void displayWinner(int winner);
-	void displayTable();
-	
-	int declare(int round);
-	
+	~Interface() {
+		delete window;
+	}
+
 };

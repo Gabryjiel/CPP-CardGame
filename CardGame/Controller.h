@@ -1,24 +1,13 @@
 #pragma once
-#include "Game.h"
-#include "GameInterface.h"
-#include "MenuInterface.h"
+#include "MenuController.h"
+#include "GameController.h"
 
 class Controller{
-	Game *game;
-	GameInterface *view;
-
-	std::string command;
-	sf::Vector2u codes;
+	GameSettings * settings = new GameSettings();
+	MenuController* menu_controller = new MenuController(*settings);
+	GameController* game_controller = new GameController(*settings);
 	
 public:
-	Controller();
-	void mainMenu();
-
-private:
-	~Controller();
-
-	void checkEvent();
-	void interpretEvent();
-	void gameStart();
+	void startGame();
 };
 

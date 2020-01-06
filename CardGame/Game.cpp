@@ -2,13 +2,12 @@
 #include <windows.h>
 
 Game::~Game(){
-	delete console;
 	delete[] player;
 	delete ai;
 }
 
 void Game::start() {
-	this->startRound();
+	this->prepareRound();
 	for (int i = round; i > 0; i--) {
 		this->singleRound();
 		this->sumUpRound();
@@ -16,7 +15,7 @@ void Game::start() {
 	this->endRound();
 }
 
-void Game::startRound() {
+void Game::prepareRound() {
 	this->setDefaultDeck();
 	this->shuffle();
 
@@ -30,30 +29,37 @@ void Game::startRound() {
 		player[i].sortDeck();
 	
 	console2->displayStart();
-	console->displayTriumph(triumph);
-	console->displayStart();
-	console->display();
+//	console->displayStart();
+//	console->display();
 	
 
 	for (int i = 0; i < this->numberOfPlayers; i++) {
 		int aiLevel = this->player[i].getAI();
 		if (!aiLevel)
-			console->declare(round);
-		else
+	//		console->declare(round);
+//		else
 			ai->declare(aiLevel);
 	}
 	
 }
 
+void Game::setDeclaration(int declaration){
+	for (int i = 0; i < numberOfPlayers; i++) {
+		if (player[i].getAI() == 0)
+			player[i].setDeclaration(declaration);
+	}
+}
+
 int Game::cardSelector(int player) {
 	int selection;
 	if (this->player[player].getAI() != 0)
-		selection = ai->selectCard(player);
+		selection = ai->selectCard(player, 0);
 	else {
 		bool check;
 		do {
 			check = false;;
-			selection = console->selectCard(player);
+//			selection = console->selectCard(player);
+			selection = 0;
 			if (deck.size() != 0) {
 				int topColor = getDeck()[0]->getColor();
 				if (this->player[player].getDeck()[selection]->getColor() != topColor) {
@@ -81,15 +87,15 @@ int Game::cardSelector(int player) {
 void Game::singleRound() {
 	for (int i = roundWinner; getDeckSize() != numberOfPlayers;) {
 		addCard(player[i].throwCard(cardSelector(i)));
-		console->displayStart();
-		console->displayTable();
+//		console->displayStart();
+//		console->displayTable();
 
 		if (i == this->numberOfPlayers - 1) i = 0;
 		else i++;
 		}
 }
 
-void Game::sumUpRound() {
+void Game::sumUpTable() {
 	Card* analyzer;
 	int topColor = deck[0]->getColor();
 	int max = 0;
@@ -111,12 +117,35 @@ void Game::sumUpRound() {
 	}
 	player[roundWinner].setTaken(player[roundWinner].getTaken() + 1);
 	clearDeck();
-	console->displayWinner(roundWinner);
+//	console->displayWinner(roundWinner);
+}
+
+void Game::sumUpRound(){
+	for (int i = 0; i < numberOfPlayers; i++) {
+		if (player[i].getDeclaration() == player[i].getTaken()) {
+			player[i].setPoints(player[i].getPoints() + player[i].getDeclaration() + 10);
+		}
+		else continue;
+	}
+}
+
+int Game::getRoundWinner(){
+	return roundWinner;
+}
+
+void Game::makeAMove(int player, int card){
+	if (card == -1)
+		card = ai->selectCard(player, 0);
+	this->player[player].throwCard(card);
+}
+
+int Game::aiCardSelection(int player, int difficulty){
+	return ai->selectCard(player, difficulty);
 }
 
 
 void Game::endRound() {
-	console->displayResult();
+//	console->displayResult();
 
 	for (int i = 0; i < numberOfPlayers; i++) {
 		this->player[i].clearDeck();

@@ -1,11 +1,10 @@
 #pragma once
-#include "GameInterface.h"
 #include "Player.h"
-#include "Interface.h"
+#include "ConsoleView.h"
 #include "AI.h"
 
 class Game : public Deck{
-	friend class Controller;
+	friend class GameController;
 	//friend Controller::Controller();
 	int round; 
 	int roundWinner;
@@ -13,14 +12,13 @@ class Game : public Deck{
 
 	Player* player;
 	Card* triumph;
-	Interface* console2;
+	ConsoleView* console2;
 	AI* ai;
-	GameInterface* console;
 	
 
 	//Sets up the round
 	//Sets up "mainDeck", players "hand" and "triumph"
-	void startRound();
+	
 
 	int cardSelector(int player);
 
@@ -30,8 +28,6 @@ class Game : public Deck{
 	
 	//Round through
 	void singleRound();
-
-	void sumUpRound();	//Who won? Who's next?
 
 public:
 	Game(int nOP = 4) :numberOfPlayers(nOP) {
@@ -44,11 +40,17 @@ public:
 
 		player[0].setAI(false);
 		roundWinner = 0;
-		console2 = new Interface(player, &deck, triumph, nOP);
-		console = new GameInterface(player, &deck, triumph, nOP);
+		console2 = new ConsoleView(player, &deck, triumph, nOP);
 	};
 	~Game();
 	
 	void start();
+	void prepareRound();
+	void setDeclaration(int declaration);
+	void sumUpTable();
+	void sumUpRound();
+	int getRoundWinner();
+	void makeAMove(int player, int card);
+	int aiCardSelection(int player, int difficulty);
 };
 

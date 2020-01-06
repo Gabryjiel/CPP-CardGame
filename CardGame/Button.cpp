@@ -18,7 +18,7 @@ void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 void Button::setText(sf::String newString) {
 	text.setString(newString);
 	sf::FloatRect a = this->text.getGlobalBounds();
-	background.setSize(sf::Vector2f(a.width, text.getCharacterSize()));
+	background.setSize(sf::Vector2f(a.width, float(text.getCharacterSize())));
 	background.setFillColor(sf::Color::Red);
 	background.setOutlineColor(sf::Color::Red);
 	background.setOutlineThickness(2);
@@ -29,25 +29,25 @@ void Button::setPosition(float x, float y) {
 
 	float outlineThickness = background.getOutlineThickness();
 	background.setOutlineThickness(0);
-	int tmpX = x, tmpY = y;
+	int tmpX = int(x), tmpY = int(y);
 	
 	if (hFormat == 0)
-		tmpX = x - 1;
+		tmpX = int(x) - 1;
 	else if (hFormat == 1)
-		tmpX = x - 1 + background.getGlobalBounds().width / 2 - text.getLocalBounds().width/2 - 1;
+		tmpX = int(x) - 1 + int(background.getGlobalBounds().width) / 2 - int(text.getLocalBounds().width)/2 - 1;
 	else if (hFormat == 2)
-		tmpX = x - 1 + background.getGlobalBounds().width - text.getLocalBounds().width;
+		tmpX = int(x) - 1 + int(background.getGlobalBounds().width) - int(text.getLocalBounds().width);
 
 	if (vFormat == 0)
-		tmpY = y - (text.getCharacterSize() - text.getLocalBounds().height);
+		tmpY = int(y) - text.getCharacterSize() + int(text.getLocalBounds().height);
 	else if (vFormat == 1)
-		tmpY = y - (text.getCharacterSize() - text.getLocalBounds().height) 
-		+ background.getGlobalBounds().height / 2 - text.getLocalBounds().height / 2;
+		tmpY = int(y) - text.getCharacterSize() + int(text.getLocalBounds().height) 
+		+ int(background.getGlobalBounds().height) / 2 - int(text.getLocalBounds().height) / 2;
 	else if (vFormat == 2)
-		tmpY = y - (text.getCharacterSize() - text.getLocalBounds().height)
-		+ background.getGlobalBounds().height - text.getCharacterSize();
+		tmpY = int(y) - text.getCharacterSize() + int(text.getLocalBounds().height)
+		+ int(background.getGlobalBounds().height) - text.getCharacterSize();
 	
-	text.setPosition(tmpX, tmpY);
+	text.setPosition(float(tmpX), float(tmpY));
 	background.setOutlineThickness(outlineThickness);
 }
 

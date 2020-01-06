@@ -1,9 +1,9 @@
-#include "Interface.h"
+#include "ConsoleView.h"
 #include <iostream>
 #include <conio.h>
 #include <vector>
 
-Interface::Interface(Player* player, std::vector <Card*> *table, Card* triumph, int nOP) {
+ConsoleView::ConsoleView(Player* player, std::vector <Card*> *table, Card* triumph, int nOP) {
 	this->player = player;
 	this->table = table;
 	this->triumph = triumph;
@@ -12,7 +12,7 @@ Interface::Interface(Player* player, std::vector <Card*> *table, Card* triumph, 
 	setCursor(0, 0);
 }
 
-int Interface::prepareConsole(){
+int ConsoleView::prepareConsole(){
 	int WindowX = 100, WindowY = 40;
 
 	SetConsoleTitle("Planowanie");
@@ -29,10 +29,10 @@ int Interface::prepareConsole(){
 	wcscpy_s(fontInf.FaceName, L"Terminal");
 	SetCurrentConsoleFontEx(outHnl, TRUE, &fontInf);
 
-	COORD sizeB = { WindowX,WindowY };
+	COORD sizeB = { short(WindowX), short(WindowY)};
 	SetConsoleScreenBufferSize(outHnl, sizeB);
 
-	SMALL_RECT sizeW = { 0, 0, WindowX - 1, WindowY - 1 };
+	SMALL_RECT sizeW = { 0, 0, short(WindowX) - 1, short(WindowY) - 1 };
 	SetConsoleWindowInfo(outHnl, true, &sizeW);
 
 	CONSOLE_CURSOR_INFO cursorInfo = { 100,false };
@@ -41,16 +41,16 @@ int Interface::prepareConsole(){
 	return 0;
 }
 
-void Interface::setCursor(int x, int y) {
-	COORD coord = { x, y };
+void ConsoleView::setCursor(int x, int y) {
+	COORD coord = { short(x), short(y) };
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-void Interface::cursorDown() {
+void ConsoleView::cursorDown() {
 	std::cout << "\n\r";
 }
 
-int Interface::selectCard(int player) {
+int ConsoleView::selectCard(int player) {
 	int klik;
 	int selection = 0;
 
@@ -69,7 +69,7 @@ int Interface::selectCard(int player) {
 	return selection;
 }
 
-void Interface::displayStart() {
+void ConsoleView::displayStart() {
 	setCursor(0, 0);
 	for (int i = 0; i < numberOfPlayers; i++) {
 		std::cout << '(' << player[i].getDeclaration() << ") P" << i << ": ";
@@ -78,23 +78,23 @@ void Interface::displayStart() {
 	}
 }
 
-void Interface::displayTriumph(Card * triumph) {
+void ConsoleView::displayTriumph(Card * triumph) {
 	std::cout << "Triumph: ";
 	printCard(triumph);
 }
 
-void Interface::displayResult(){
+void ConsoleView::displayResult(){
 	cursorDown();
 	for (int i = 0; i < numberOfPlayers; i++) {
 		std::cout << 'P' << i << ": " << player[i].getTaken() << std::endl;
 	}
 }
 
-void Interface::displayWinner(int winner){
+void ConsoleView::displayWinner(int winner){
 	std::cout << 'P' << winner << " takes it!";
 }
  
-void Interface::displayTable() {
+void ConsoleView::displayTable() {
 	static int posY;
 	setCursor(0, numberOfPlayers + 2 + posY);
 	printDeck(table);
@@ -102,7 +102,7 @@ void Interface::displayTable() {
 		posY += 1 ;
 }
 
-void Interface::printCard(const Card* card) {
+void ConsoleView::printCard(const Card* card) {
 	int figure = card->getFigure();
 	int color = card->getColor();
 	char signF = -1;
@@ -123,7 +123,7 @@ void Interface::printCard(const Card* card) {
 	else std::cout << ' ' << signF << signC << ' ';
 }
 
-void Interface::printDeck(const std::vector <Card*> deck) {
+void ConsoleView::printDeck(const std::vector <Card*> deck) {
 	for (unsigned int i = 0; i < deck.size(); i++) {
 		int figure = deck[i]->getFigure();
 		int color = deck[i]->getColor();
@@ -146,7 +146,7 @@ void Interface::printDeck(const std::vector <Card*> deck) {
 	}
 }
 
-void Interface::printDeck(const std::vector <Card*>* deck){
+void ConsoleView::printDeck(const std::vector <Card*>* deck){
 	for (unsigned int i = 0; i < deck->size(); i++) {
 		int figure = deck->at(i)->getFigure();
 		int color = deck->at(i)->getColor();
@@ -169,7 +169,7 @@ void Interface::printDeck(const std::vector <Card*>* deck){
 	}
 }
 
-int Interface::declare(int round) {
+int ConsoleView::declare(int round) {
 	int declaration;
 	int sum = 0;
 	int allow = 0;

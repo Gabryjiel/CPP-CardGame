@@ -1,6 +1,7 @@
 #pragma once
 #include "GCard.h"
 #include "Player.h"
+#include "GameSettings.h"
 #include <functional>
 
 #define BACKGROUNDCOLOR sf::Color(44, 89, 56)
@@ -12,17 +13,17 @@ typedef struct{
 }Position;
 
 class GameInterface{
-	sf::RenderWindow window;
+	sf::RenderWindow* window;
 	GCard* cards;
 	Position* positions;
+	GameSettings* settings;
 
 	Player* player;
 	std::vector <Card*>* table;
-	Card* triumph;
 	int numberOfPlayers;
 
 public:
-	GameInterface(Player* player, std::vector<Card*>* table, Card* triumph, int nOP = 0);
+	GameInterface(GameSettings& settings, Player* player, std::vector<Card*>* table, int nOP = 0);
 	~GameInterface();
 
 	void displayStart();
@@ -30,12 +31,14 @@ public:
 	void displayResult();
 	void displayTable();
 	void displayWinner(int roundWinner);
+	void drawBackground();
 
 	int selectCard(int player);
 	int declare(int round);
 	void loadCards();
 	void setPositions();
 	void display();
-	bool getEvent(sf::Event event);
+	bool checkEvent(sf::Event& event);
+	sf::String checkCoords(sf::Vector2u* codes);
 };
 
