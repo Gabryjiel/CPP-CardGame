@@ -19,11 +19,12 @@ void GameController::gameStart() {
 		view->displayTriumph(game->triumph);
 		view->display();
 		//view->display();
+
 		while (true) {
 			if(checkCommand("CLOSE")) return;
 			if(checkCommand("Declaration")) break;
 		}
-		if (command == "CLOSE") break;
+
 		waitForCommand("Declaration");
 		game->setDeclaration(codes.x);
 		//int roundLength = settings->rounds.front();
@@ -34,7 +35,7 @@ void GameController::gameStart() {
 					while (true) {
 						if (checkCommand("CLOSE")) return;
 						if (checkCommand("ThrowCard")) break;
-					};
+					}
 					//card_id = makeAMove(i);
 				}
 				else
