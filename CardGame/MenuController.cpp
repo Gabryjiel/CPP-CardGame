@@ -13,16 +13,14 @@ MenuController::~MenuController() {
 int MenuController::start() {
 	view->menu("MainMenu");
 	while (true) {
+		command = "";
 		codes.x = codes.y = 0;
 		while (command == "")
 			checkEvent();
 
 		interpretEvent();
 
-		if (command == "") {
-			continue;
-		}
-		else if (command == "QuickGame") {
+		if (command == "QuickGame") {
 			return STARTGAME;
 		}
 		else if (command == "CustomGame" || command == "Options" || command == "MainMenu") {
@@ -111,5 +109,4 @@ void MenuController::interpretEvent() {
 			}
 		}
 	}
-	else command = "";
 }

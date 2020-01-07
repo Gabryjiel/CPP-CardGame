@@ -2,7 +2,8 @@
 #include  "SFML/Graphics.hpp"
 
 class GCard : public sf::Sprite{
-	sf::Texture image;
+	sf::Image image;
+	sf::Texture texture;
 	sf::Sprite sprite;
 
 public:

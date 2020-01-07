@@ -1,16 +1,17 @@
 #include "Button.h"
 
-Button::Button(const char* newString) {
+Button::Button(sf::String newString) {
 	hFormat = 0;
 	vFormat = 0;
-	if (defaultFont.getInfo().family == "")
+	sf::Font::Info fontInfo = defaultFont.getInfo();
+	if (fontInfo.family == "")
 		defaultFont.loadFromFile("C:\\WINDOWS\\Fonts\\arial.ttf");
 	text.setFont(defaultFont);
 	setText(newString);
 	
 }
 
-void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 	target.draw(background);
 	target.draw(text);
 }

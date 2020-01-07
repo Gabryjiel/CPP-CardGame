@@ -107,7 +107,7 @@ void GameInterface::loadCards() {
 	
 	for (int i = 0; i < 52; i++) {
 		sf::String cardname;
-		
+
 		if (i % 13 == 0) cardname = "2_of_";
 		else if (i % 13 == 1) cardname = "3_of_";
 		else if (i % 13 == 2) cardname = "4_of_";
@@ -144,7 +144,6 @@ void GameInterface::displayStart(){
 			window->draw(cards[deck[j]->getId()]);
 		}
 	}
-	window->display();
 }
 
 void GameInterface::displayTriumph(Card* triumph){

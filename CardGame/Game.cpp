@@ -17,7 +17,7 @@ void Game::start() {
 
 void Game::prepareRound() {
 	this->setDefaultDeck();
-	this->shuffle();
+	//this->shuffle();
 
 	for (int i = 0; i < round * numberOfPlayers; i++) {
 		player[i % numberOfPlayers].addCard(throwCard(0));

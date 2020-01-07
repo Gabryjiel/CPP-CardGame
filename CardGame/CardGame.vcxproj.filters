@@ -103,5 +103,13 @@
     <ClInclude Include="GameSettings.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CardGame.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\cards\2_of_clubs.png" />
+    <Image Include="images\cards\2_of_diamonds.png" />
   </ItemGroup>
 </Project>

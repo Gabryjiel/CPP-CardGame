@@ -11,21 +11,32 @@ GameController::~GameController() {
 	delete view;
 }
 
-int GameController::start() {
+void GameController::gameStart() {
 	view->setPositions();
 	while (!settings->rounds.empty()) {
 		game->prepareRound();
 		view->displayStart();
 		view->displayTriumph(game->triumph);
 		view->display();
-		view->display();
-		game->setDeclaration(makeDeclaration());
+		//view->display();
+		while (true) {
+			if(checkCommand("CLOSE")) return;
+			if(checkCommand("Declaration")) break;
+		}
+		if (command == "CLOSE") break;
+		waitForCommand("Declaration");
+		game->setDeclaration(codes.x);
 		//int roundLength = settings->rounds.front();
 		while (settings->rounds[0]--) {
 			for (int i = game->getRoundWinner(), cardsOnTable = 0; cardsOnTable < int(settings->players.size()); cardsOnTable++) {
 				int card_id = -1;
-				if (settings->players[i] == 0)
-					card_id = makeAMove(i);
+				if (settings->players[i] == 0) {
+					while (true) {
+						if (checkCommand("CLOSE")) return;
+						if (checkCommand("ThrowCard")) break;
+					};
+					//card_id = makeAMove(i);
+				}
 				else
 					card_id = game->aiCardSelection(i, settings->players[i]);
 				game->makeAMove(i, card_id);
@@ -44,39 +55,43 @@ int GameController::start() {
 		view->displayTable();
 		settings->rounds.erase(settings->rounds.begin());
 	}
-	return 1;
 }
 
-int GameController::makeDeclaration() {
+int GameController::start() {
+	settings->window->setActive(false);
+	std::thread eventThread(&GameController::gameStart, this);
+	int mode = 1;
 	while (true) {
-		checkEvent();
-		interpretEvent();
-		if (command == "Declaration")
-			break;
-	}
-	return codes.x;
-}
-
-int GameController::makeAMove(int player) {
-	while (true) {
-		checkEvent();
-		interpretEvent();
-		if (command == "ThrowCard")
-			break;
-	}
-	return codes.x;
-}
-
-void GameController::userAction() {
-	while (true) {
+		command = "";
 		codes.x = codes.y = 0;
 		while (command == "")
 			checkEvent();
+			
 		interpretEvent();
 
-		if (command == "")
-			continue;
+		if (command == "Declaration")
+			command = "";
+		else if (command == "CLOSE") {
+			eventThread.join();
+			mode = 0;
+			command = "";
+			break;
+		}
+		
+	}
+	return mode;
+}
 
+bool GameController::checkCommand(const sf::String command) {
+	if (this->command == command) return true;
+	return false;
+}
+
+inline void GameController::waitForCommand(const sf::String command){
+	bool result = false;
+	while (true) {
+		if (this->command == "CLOSE") return;
+		if (this->command == command) break;
 	}
 }
 
@@ -128,6 +143,9 @@ void GameController::interpretEvent() {
 			command = "ThrowCard";
 			codes.x = codes.y = selection;
 		}
+	}
+	else if (command == "CLOSE") {
+		std::cout << "Closing";
 	}
 	else command = "";
 }
