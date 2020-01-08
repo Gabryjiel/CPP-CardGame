@@ -171,6 +171,9 @@
     <Image Include="images\cards\2_of_clubs.png" />
     <Image Include="images\cards\2_of_diamonds.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="images\cards\rcdata1.bin" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

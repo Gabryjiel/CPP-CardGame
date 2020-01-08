@@ -17,9 +17,10 @@ void GameController::gameStart() {
 		game->prepareRound();
 		view->displayStart();
 		view->displayTriumph(game->triumph);
-		view->display();
+		
 		//view->display();
-
+		view->drawDeclaration();
+		view->display();
 		while (true) {
 			if(checkCommand("CLOSE")) return;
 			if(checkCommand("Declaration")) break;

@@ -47,10 +47,16 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// PNG
+// RCDATA
 //
 
-IDB_PNG1                RCDATA                     "images\\cards\\2_of_clubs.png"
+IDB_PNG1                RCDATA                  "images\\cards\\2_of_clubs.png"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// PNG
+//
 
 IDB_PNG2                PNG                     "images\\cards\\2_of_diamonds.png"
 

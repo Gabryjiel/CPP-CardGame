@@ -2,6 +2,7 @@
 #include "GCard.h"
 #include "Player.h"
 #include "GameSettings.h"
+#include "Button.h"
 #include <functional>
 
 #define BACKGROUNDCOLOR sf::Color(44, 89, 56)
@@ -32,6 +33,7 @@ public:
 	void displayTable();
 	void displayWinner(int roundWinner);
 	void drawBackground();
+	void drawDeclaration();
 
 	int selectCard(int player);
 	int declare(int round);

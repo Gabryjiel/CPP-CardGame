@@ -175,6 +175,26 @@ void GameInterface::displayWinner(int roundWinner)
 {
 }
 
+void GameInterface::drawDeclaration() {
+	int sum = 0;
+	int numberOfCards = player[0].getDeckSize();
+	for (int i = 0; i < numberOfPlayers; i++)
+		sum += player[i].getDeclaration();
+
+	Button* declarations = new Button[numberOfCards + 1];
+
+	for (int i = 0; i < numberOfCards + 1; i++) {
+		declarations[i].setPosition(float(30 * i + 20), float(50));
+		declarations[i].setBackgroundColor(sf::Color::Red);
+		declarations[i].setFormating(1, 1);
+		declarations[i].setText(sf::String(std::to_string(i)));
+		declarations[i].setSize(25, 30);
+		if (sum + i != numberOfCards || sum == 0 || numberOfCards < 3)
+			window->draw(declarations[i]);
+	}
+
+}
+
 int GameInterface::selectCard(int player)
 {
 	return 0;
