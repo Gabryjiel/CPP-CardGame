@@ -14,6 +14,31 @@ void GCard::loadImage(sf::String path) {
 	sprite.scale(float(0.15), float(0.15));
 }
 
+
+void GCard::loadImageA() {
+		HRSRC rsrcData = FindResource(NULL, MAKEINTRESOURCE(IDB_PNG1), RT_RCDATA);
+		if (!rsrcData)
+			throw std::runtime_error("Failed to find resource.");
+
+		DWORD rsrcDataSize = SizeofResource(NULL, rsrcData);
+		if (rsrcDataSize <= 0)
+			throw std::runtime_error("Size of resource is 0.");
+
+		HGLOBAL grsrcData = LoadResource(NULL, rsrcData);
+		if (!grsrcData)
+			throw std::runtime_error("Failed to load resource.");
+
+		LPVOID firstByte = LockResource(grsrcData);
+		if (!firstByte)
+			throw std::runtime_error("Failed to lock resource.");
+
+		if (!image.loadFromMemory(firstByte, rsrcDataSize))
+			throw std::runtime_error("Failed to load image from memory.");
+		texture.loadFromImage(image);
+		sprite.setTexture(texture);
+		sprite.scale(float(0.15), float(0.15));
+}
+
 sf::FloatRect GCard::getSize(){
 	return this->sprite.getGlobalBounds();
 }
