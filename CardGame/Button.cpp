@@ -76,3 +76,7 @@ void Button::setBackgroundColor(sf::Color color) {
 bool Button::isOn(float x, float y) {
 	return background.getGlobalBounds().contains(x, y);
 }
+
+sf::FloatRect Button::getGlobalBounds(){
+	return background.getGlobalBounds();
+}

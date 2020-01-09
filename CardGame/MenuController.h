@@ -1,13 +1,8 @@
 #pragma once
-#include "MenuInterface.h"
-#include "GameSettings.h"
+#include "Controller.h"
+#include "MenuView.h"
 
-#define STARTGAME 2
-#define CLOSEGAME 0
-
-class MenuController{
-	MenuInterface *view;
-	GameSettings* settings;
+class MenuController : public Controller{
 
 	sf::String command;
 	sf::Vector2u codes;

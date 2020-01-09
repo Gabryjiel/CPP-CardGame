@@ -1,11 +1,10 @@
 #pragma once
+#include "View.h"
 #include "GCard.h"
 #include "Player.h"
 #include "GameSettings.h"
 #include "Button.h"
 #include <functional>
-
-#define BACKGROUNDCOLOR sf::Color(44, 89, 56)
 
 typedef struct{
 	sf::Vector2f hand;
@@ -13,24 +12,27 @@ typedef struct{
 	std::function <sf::Vector2f(int, int, sf::FloatRect, sf::Vector2f)> gap;
 }Position;
 
-class GameInterface{
-	sf::RenderWindow* window;
+class GameView : public View{
 	GCard* cards;
-	Position* positions;
-	GameSettings* settings;
+	std::vector<Position> positions;
 
 	Player* player;
 	std::vector <Card*>* table;
+	Card** triumph;
 	int numberOfPlayers;
 
 public:
-	GameInterface(GameSettings& settings, Player* player, std::vector<Card*>* table, int nOP = 0);
-	~GameInterface();
-
-	void displayStart();
-	void displayTriumph(Card* triumph);
-	void displayResult();
-	void displayTable();
+	GameView(GameSettings& settings, Player* player, std::vector<Card*>* table, Card** triumph, int nOP = 0);
+	~GameView();
+	
+	void drawScene(const sf::String mode);
+	bool checkEvent(sf::Event& event);
+	sf::String checkCoords(sf::Vector2u& codes);
+	
+	void drawStart();
+	void drawTriumph();
+	void drawResult();
+	void drawTable();
 	void displayWinner(int roundWinner);
 	void drawBackground();
 	void drawDeclaration();
@@ -39,8 +41,6 @@ public:
 	int declare(int round);
 	void loadCards();
 	void setPositions();
-	void display();
-	bool checkEvent(sf::Event& event);
-	sf::String checkCoords(sf::Vector2u* codes);
+	
 };
 

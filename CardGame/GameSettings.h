@@ -8,4 +8,5 @@ struct GameSettings {
 	std::vector <int> rounds = { 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
 	int cardTheme = 0;
 	int backgroundColor[3] = { 44, 89, 56 };
+	sf::Color backgroundColour = sf::Color(44, 89, 56);
 };

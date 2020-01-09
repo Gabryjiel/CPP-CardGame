@@ -1,8 +1,7 @@
 #include "MenuController.h"
 
-MenuController::MenuController(GameSettings& settings) {
-	this->settings = &settings;
-	view = new MenuInterface(*(settings.window));
+MenuController::MenuController(GameSettings& settings):Controller(settings) {
+	view = new MenuView(settings);
 	command = "";
 }
 
@@ -11,7 +10,7 @@ MenuController::~MenuController() {
 }
 
 int MenuController::start() {
-	view->menu("MainMenu");
+	view->drawScene("MainMenu");
 	while (true) {
 		command = "";
 		codes.x = codes.y = 0;
@@ -24,14 +23,14 @@ int MenuController::start() {
 			return STARTGAME;
 		}
 		else if (command == "CustomGame" || command == "Options" || command == "MainMenu") {
-			view->menu(command);
+			view->drawScene(command);
 		}
 		else if (command == "Continue") {
 
 		}
 		else if (command == "CLOSE") {
 			view->close();
-			return CLOSEGAME;
+			return CLOSEPROGRAM;
 		}
 		else if (command == "Resolution") {
 

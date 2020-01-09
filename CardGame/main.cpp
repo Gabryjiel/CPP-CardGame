@@ -1,9 +1,9 @@
-#include "Controller.h"
+#include "Launcher.h"
 
 int main(){
-	
-	Controller controller;
-	controller.startGame();
-	
+
+	Launcher launcher;
+	launcher.startGame();
+
 	return 0;
 }

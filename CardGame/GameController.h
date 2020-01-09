@@ -1,15 +1,13 @@
 #pragma once
-#include "GameInterface.h"
+#include "Controller.h"
+#include "GameView.h"
 #include "Game.h"
 #include <thread>
 #include <mutex>
 
-class GameController{
+class GameController : public Controller{
+	
 	Game* game;
-	GameInterface* view;
-	GameSettings* settings;
-	std::mutex mutex;
-
 	sf::String command;
 	sf::Vector2u codes;
 
@@ -21,6 +19,7 @@ class GameController{
 	void events();
 	void gameStart();
 	bool checkCommand(const sf::String command);
+	bool waitForEvent(sf::String);
 	inline void waitForCommand(const sf::String command) ;
 public:
 	GameController(GameSettings& settings);

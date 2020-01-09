@@ -19,5 +19,6 @@ public:
 	void setBackgroundColor(sf::Color color);
 	
 	bool isOn(float x, float y);
+	sf::FloatRect getGlobalBounds();
 };
 

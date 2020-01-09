@@ -1,13 +1,21 @@
 #pragma once
-#include "MenuController.h"
-#include "GameController.h"
+#include "GameSettings.h"
+#include "View.h"
+
+#define CLOSEPROGRAM 0
+#define MAINMENU 1
+#define STARTGAME 2
 
 class Controller{
-	GameSettings * settings = new GameSettings();
-	MenuController* menu_controller = new MenuController(*settings);
-	GameController* game_controller = new GameController(*settings);
-	
+
+protected:
+	View* view = nullptr;
+	GameSettings* settings;
+
 public:
-	void startGame();
+	Controller(GameSettings & settings);
+	~Controller();
+
+	virtual int start() = 0;
 };
 

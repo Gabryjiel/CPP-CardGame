@@ -21,7 +21,8 @@ public:
 	void setDefaultDeck();
 
 	bool checkForColor(int color);
-	void addCard(Card* newCard);	//Adds Card to the vector
+	void addCard(int player, Card* newCard);
+	void addCard(Card* newCard);
 	bool shuffle();	//Randomizes position of Cards in the vector
 	Card * throwCard(int id);	//Removes Card from the vector with id
 	void sortDeck();

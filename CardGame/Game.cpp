@@ -7,7 +7,7 @@ Game::~Game(){
 }
 
 void Game::start() {
-	this->prepareRound();
+	this->prepareRound(round);
 	for (int i = round; i > 0; i--) {
 		this->singleRound();
 		this->sumUpRound();
@@ -15,15 +15,17 @@ void Game::start() {
 	this->endRound();
 }
 
-void Game::prepareRound() {
+void Game::prepareRound(int numberOfCards) {
 	this->setDefaultDeck();
 	//this->shuffle();
 
-	for (int i = 0; i < round * numberOfPlayers; i++) {
+	for (int i = 0; i < numberOfCards*numberOfPlayers; i++) {
+		if(i > 52) throw std::runtime_error("Not enough cards in the deck.");
 		player[i % numberOfPlayers].addCard(throwCard(0));
 	}
 	triumph = throwCard(0);
 	clearDeck();
+	this->deck.resize(numberOfPlayers);
 
 	for (int i = 0; i < numberOfPlayers; i++)
 		player[i].sortDeck();
@@ -86,7 +88,7 @@ int Game::cardSelector(int player) {
 
 void Game::singleRound() {
 	for (int i = roundWinner; getDeckSize() != numberOfPlayers;) {
-		addCard(player[i].throwCard(cardSelector(i)));
+		addCard(i, player[i].throwCard(cardSelector(i)));
 //		console->displayStart();
 //		console->displayTable();
 
@@ -117,6 +119,7 @@ void Game::sumUpTable() {
 	}
 	player[roundWinner].setTaken(player[roundWinner].getTaken() + 1);
 	clearDeck();
+	this->deck.resize(numberOfPlayers);
 //	console->displayWinner(roundWinner);
 }
 
@@ -136,7 +139,7 @@ int Game::getRoundWinner(){
 void Game::makeAMove(int player, int card){
 	if (card == -1)
 		card = ai->selectCard(player, 0);
-	this->player[player].throwCard(card);
+	addCard(player, this->player[player].throwCard(card));
 }
 
 int Game::aiCardSelection(int player, int difficulty){

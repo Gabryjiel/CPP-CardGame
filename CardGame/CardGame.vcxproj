@@ -135,34 +135,38 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="Launcher.cpp" />
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="MenuController.cpp" />
     <ClCompile Include="Deck.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameInterface.cpp" />
+    <ClCompile Include="GameView.cpp" />
     <ClCompile Include="GCard.cpp" />
-    <ClCompile Include="MenuInterface.cpp" />
+    <ClCompile Include="MenuView.cpp" />
     <ClCompile Include="ConsoleView.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="View.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Card.h" />
+    <ClInclude Include="Commands.h" />
     <ClInclude Include="Controller.h" />
+    <ClInclude Include="Launcher.h" />
     <ClInclude Include="GameController.h" />
     <ClInclude Include="GameSettings.h" />
-    <ClInclude Include="Interface.h" />
     <ClInclude Include="MenuController.h" />
     <ClInclude Include="Deck.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="GameInterface.h" />
+    <ClInclude Include="GameView.h" />
     <ClInclude Include="GCard.h" />
-    <ClInclude Include="MenuInterface.h" />
+    <ClInclude Include="MenuView.h" />
     <ClInclude Include="ConsoleView.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="View.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CardGame.rc" />
@@ -170,9 +174,6 @@
   <ItemGroup>
     <Image Include="images\cards\2_of_clubs.png" />
     <Image Include="images\cards\2_of_diamonds.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="images\cards\rcdata1.bin" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

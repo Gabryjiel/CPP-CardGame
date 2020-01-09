@@ -47,6 +47,10 @@ bool Deck::checkForColor(int color){
 	return false;
 }
 
+void Deck::addCard(int player, Card* newCard) {
+	this->deck[player] = newCard;
+}
+
 void Deck::addCard(Card* newCard) {
 	this->deck.push_back(newCard);
 }

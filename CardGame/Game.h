@@ -32,7 +32,7 @@ class Game : public Deck{
 public:
 	Game(int nOP = 4) :numberOfPlayers(nOP) {
 		player = new Player[numberOfPlayers];
-		triumph = nullptr;
+		this->deck.resize(numberOfPlayers);
 		ai = new AI;
 		if (52 % nOP == 0)
 			round = 52 / nOP - 1;
@@ -45,7 +45,7 @@ public:
 	~Game();
 	
 	void start();
-	void prepareRound();
+	void prepareRound(int numberOfCards);
 	void setDeclaration(int declaration);
 	void sumUpTable();
 	void sumUpRound();

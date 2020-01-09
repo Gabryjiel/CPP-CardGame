@@ -14,105 +14,154 @@
     <Filter Include="View">
       <UniqueIdentifier>{b120eb1f-8ecf-4f7e-b109-17270c064e04}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Model\Headers">
+      <UniqueIdentifier>{0ebe38c8-e092-4fb4-958b-f1d99dfa8f1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model\Sources">
+      <UniqueIdentifier>{530d79ce-b09d-4ea3-bd5f-51da5972a7f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View\Headers">
+      <UniqueIdentifier>{a5391cf4-b219-4a8c-a966-41f578837532}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Controller\Headers">
+      <UniqueIdentifier>{256e737b-469e-4bdb-8406-e9ae37fe8fa7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Controller\Sources">
+      <UniqueIdentifier>{0bf0b61e-854f-40fd-999d-dc805b42cd52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View\XOther">
+      <UniqueIdentifier>{b60db571-2c82-4ae0-b2bb-56ee84b97ebc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View\Sources">
+      <UniqueIdentifier>{7e4dd88f-0720-41f0-a145-a017878604de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{3b78c17e-44cb-4d37-9d0c-122290b61dea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\images">
+      <UniqueIdentifier>{c481cfa3-9da8-4ebb-9650-92532e0e9f88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\images\cards">
+      <UniqueIdentifier>{f33e2045-b91d-4bd5-8f9a-06f4d786b7cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Button.cpp">
-      <Filter>View</Filter>
-    </ClCompile>
-    <ClCompile Include="GameInterface.cpp">
-      <Filter>View</Filter>
-    </ClCompile>
-    <ClCompile Include="MenuInterface.cpp">
-      <Filter>View</Filter>
-    </ClCompile>
-    <ClCompile Include="GCard.cpp">
-      <Filter>View</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Deck.cpp">
-      <Filter>Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Card.cpp">
-      <Filter>Model</Filter>
-    </ClCompile>
-    <ClCompile Include="AI.cpp">
-      <Filter>Model</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MenuController.cpp">
-      <Filter>Controller</Filter>
+    <ClCompile Include="Launcher.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ConsoleView.cpp">
-      <Filter>View</Filter>
+    <ClCompile Include="AI.cpp">
+      <Filter>Model\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Controller.cpp">
-      <Filter>Controller</Filter>
+    <ClCompile Include="Card.cpp">
+      <Filter>Model\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Deck.cpp">
+      <Filter>Model\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Model\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Model\Sources</Filter>
     </ClCompile>
     <ClCompile Include="GameController.cpp">
-      <Filter>Controller</Filter>
+      <Filter>Controller\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuController.cpp">
+      <Filter>Controller\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller.cpp">
+      <Filter>Controller\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="View.cpp">
+      <Filter>View\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="GameView.cpp">
+      <Filter>View\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuView.cpp">
+      <Filter>View\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>View\XOther</Filter>
+    </ClCompile>
+    <ClCompile Include="GCard.cpp">
+      <Filter>View\XOther</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleView.cpp">
+      <Filter>View\XOther</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Button.h">
-      <Filter>View</Filter>
-    </ClInclude>
-    <ClInclude Include="GameInterface.h">
-      <Filter>View</Filter>
-    </ClInclude>
-    <ClInclude Include="MenuInterface.h">
-      <Filter>View</Filter>
-    </ClInclude>
-    <ClInclude Include="GCard.h">
-      <Filter>View</Filter>
-    </ClInclude>
-    <ClInclude Include="AI.h">
-      <Filter>Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Card.h">
-      <Filter>Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Deck.h">
-      <Filter>Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Model</Filter>
-    </ClInclude>
-    <ClInclude Include="MenuController.h">
-      <Filter>Controller</Filter>
-    </ClInclude>
-    <ClInclude Include="ConsoleView.h">
-      <Filter>View</Filter>
-    </ClInclude>
-    <ClInclude Include="Interface.h" />
-    <ClInclude Include="Controller.h">
-      <Filter>Controller</Filter>
-    </ClInclude>
-    <ClInclude Include="GameController.h">
-      <Filter>Controller</Filter>
-    </ClInclude>
     <ClInclude Include="GameSettings.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="Launcher.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AI.h">
+      <Filter>Model\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Card.h">
+      <Filter>Model\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Deck.h">
+      <Filter>Model\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Model\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Model\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameController.h">
+      <Filter>Controller\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuController.h">
+      <Filter>Controller\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller.h">
+      <Filter>Controller\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="View.h">
+      <Filter>View\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameView.h">
+      <Filter>View\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuView.h">
+      <Filter>View\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>View\XOther</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleView.h">
+      <Filter>View\XOther</Filter>
+    </ClInclude>
+    <ClInclude Include="GCard.h">
+      <Filter>View\XOther</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="CardGame.rc" />
+    <Image Include="images\cards\2_of_clubs.png">
+      <Filter>Resources\images\cards</Filter>
+    </Image>
+    <Image Include="images\cards\2_of_diamonds.png">
+      <Filter>Resources\images\cards</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="images\cards\2_of_clubs.png" />
-    <Image Include="images\cards\2_of_diamonds.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="images\cards\rcdata1.bin" />
+    <ResourceCompile Include="CardGame.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
