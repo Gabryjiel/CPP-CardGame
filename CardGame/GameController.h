@@ -4,10 +4,13 @@
 #include "Game.h"
 #include <thread>
 #include <mutex>
+#include "SaveData.h"
+#include <fstream>
 
 class GameController : public Controller{
 	
 	Game* game;
+	SaveData gameData;
 	sf::String command;
 	sf::Vector2u codes;
 
@@ -21,6 +24,7 @@ class GameController : public Controller{
 	bool checkCommand(const sf::String command);
 	bool waitForEvent(sf::String);
 	inline void waitForCommand(const sf::String command) ;
+	void saveGame();
 public:
 	GameController(GameSettings& settings);
 	~GameController();

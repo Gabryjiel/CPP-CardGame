@@ -4,7 +4,7 @@
 
 class ConsoleView {
 private:
-	Player* player;
+	std::vector<Player>* player;
 	std::vector <Card*>* table;
 	Card* triumph;
 	int numberOfPlayers;
@@ -17,7 +17,7 @@ private:
 	void printDeck(const std::vector <Card*>* deck);
 
 public:
-	ConsoleView(Player* player, std::vector<Card*> *table, Card* triumph, int nOP = 0);
+	ConsoleView(std::vector<Player> *player, std::vector<Card*> *table, Card* triumph, int nOP = 0);
 	int selectCard(int player);
 
 	void displayStart();

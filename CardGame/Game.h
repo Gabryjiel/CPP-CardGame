@@ -5,12 +5,13 @@
 
 class Game : public Deck{
 	friend class GameController;
+	friend struct SaveData;
 	//friend Controller::Controller();
 	int round; 
 	int roundWinner;
 	const int numberOfPlayers;
 
-	Player* player;
+	std::vector<Player> player;
 	Card* triumph;
 	ConsoleView* console2;
 	AI* ai;
@@ -31,7 +32,7 @@ class Game : public Deck{
 
 public:
 	Game(int nOP = 4) :numberOfPlayers(nOP) {
-		player = new Player[numberOfPlayers];
+		player.resize(numberOfPlayers);
 		this->deck.resize(numberOfPlayers);
 		ai = new AI;
 		if (52 % nOP == 0)
@@ -40,13 +41,13 @@ public:
 
 		player[0].setAI(false);
 		roundWinner = 0;
-		console2 = new ConsoleView(player, &deck, triumph, nOP);
+		console2 = new ConsoleView(&player, &deck, triumph, nOP);
 	};
 	~Game();
 	
 	void start();
 	void prepareRound(int numberOfCards);
-	void setDeclaration(int declaration);
+	void setDeclaration(int player, int declaration);
 	void sumUpTable();
 	void sumUpRound();
 	int getRoundWinner();

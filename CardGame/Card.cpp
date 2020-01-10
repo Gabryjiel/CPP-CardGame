@@ -1,15 +1,15 @@
 #include "Card.h"
 
-int Card::_id = 0;
+int Card::_id = 1;
 
 int Card::getId() const {
 	return id;
 }
 
 int Card::getColor() const {
-	return id / CARDS;
+	return (id - 1) / CARDS;
 }
 
 int Card::getFigure() const {
-	return id % CARDS;
+	return (id - 1) % CARDS;
 }

@@ -1,7 +1,7 @@
 #include "GameView.h"
 #include <Windows.h>
 
-GameView::GameView(GameSettings& settings, Player* player, std::vector<Card*> *table, Card** triumph, int nOP):View(settings){
+GameView::GameView(GameSettings& settings, std::vector<Player>* player, std::vector<Card*> *table, Card** triumph, int nOP):View(settings){
 	this->cards = new GCard[52];
 	this->player = player;
 	this->table = table;
@@ -145,19 +145,19 @@ void GameView::loadCards() {
 	for (int i = 0; i < 52; i++) {
 		sf::String cardname;
 
-		if (i % 13 == 0) cardname = "2_of_";
-		else if (i % 13 == 1) cardname = "3_of_";
-		else if (i % 13 == 2) cardname = "4_of_";
-		else if (i % 13 == 3) cardname = "5_of_";
-		else if (i % 13 == 4) cardname = "6_of_";
-		else if (i % 13 == 5) cardname = "7_of_";
-		else if (i % 13 == 6) cardname = "8_of_";
-		else if (i % 13 == 7) cardname = "9_of_";
-		else if (i % 13 == 8) cardname = "10_of_";
-		else if (i % 13 == 9) cardname = "jack_of_";
-		else if (i % 13 == 10) cardname = "queen_of_";
-		else if (i % 13 == 11) cardname = "king_of_";
-		else if (i % 13 == 12) cardname = "ace_of_";
+		if (i % 13 == 1) cardname = "2_of_";
+		else if (i % 13 == 2) cardname = "3_of_";
+		else if (i % 13 == 3) cardname = "4_of_";
+		else if (i % 13 == 4) cardname = "5_of_";
+		else if (i % 13 == 5) cardname = "6_of_";
+		else if (i % 13 == 6) cardname = "7_of_";
+		else if (i % 13 == 7) cardname = "8_of_";
+		else if (i % 13 == 8) cardname = "9_of_";
+		else if (i % 13 == 9) cardname = "10_of_";
+		else if (i % 13 == 10) cardname = "jack_of_";
+		else if (i % 13 == 11) cardname = "queen_of_";
+		else if (i % 13 == 12) cardname = "king_of_";
+		else if (i % 13 == 0) cardname = "ace_of_";
 
 		if (i / 13 == 0) cardname += "spades";
 		else if (i / 13 == 1) cardname += "clubs";
@@ -189,7 +189,7 @@ void GameView::drawStart(){
 	drawBackground();
 
 	for (int i = 0; i < numberOfPlayers; i++) {
-		std::vector <Card*> deck = player[i].getDeck();
+		std::vector <Card*> deck = player->at(i).getDeck();
 		for (unsigned int j = 0; j < deck.size(); j++) {
 			int temp = deck[j]->getId();
 			cards[temp].setPosition(positions[i].gap(j, deck.size(), cards->getSize(), positions[i].hand));
@@ -224,8 +224,8 @@ void GameView::drawResult()
 }
 
 void GameView::drawTable(){
-	for (int i = 0; i < (int)table->size(); i++) {
-		auto temp = table->at(i);
+	for (int i = 0; i < int(settings->players.size()); i++) {
+		Card* temp = table->at(i);
 		if (!temp == NULL) {
 			cards[temp->getId()].setPosition(positions[i].table);
 			draw(cards[temp->getId() ]);
@@ -239,9 +239,9 @@ void GameView::displayWinner(int roundWinner)
 
 void GameView::drawDeclaration() {
 	int sum = 0;
-	int numberOfCards = player[0].getDeckSize();
+	int numberOfCards = player->at(0).getDeckSize();
 	for (int i = 0; i < numberOfPlayers; i++)
-		sum += player[i].getDeclaration();
+		sum += player->at(i).getDeclaration();
 
 	Button declaration;
 	declaration.setBackgroundColor(sf::Color::Red);

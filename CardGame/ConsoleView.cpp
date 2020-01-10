@@ -3,7 +3,7 @@
 #include <conio.h>
 #include <vector>
 
-ConsoleView::ConsoleView(Player* player, std::vector <Card*> *table, Card* triumph, int nOP) {
+ConsoleView::ConsoleView(std::vector<Player>* player, std::vector <Card*> *table, Card* triumph, int nOP) {
 	this->player = player;
 	this->table = table;
 	this->triumph = triumph;
@@ -60,7 +60,7 @@ int ConsoleView::selectCard(int player) {
 		klik = _getch();
 		setCursor(11 + selection * 4, 0);
 		std::cout << ' ';
-		if (klik == 'd' && selection < this->player[player].getDeckSize() - 1)
+		if (klik == 'd' && selection < this->player->at(player).getDeckSize() - 1)
 			selection++;
 		else if (klik == 'a' && selection > 0)
 			selection--;
@@ -72,8 +72,8 @@ int ConsoleView::selectCard(int player) {
 void ConsoleView::displayStart() {
 	setCursor(0, 0);
 	for (int i = 0; i < numberOfPlayers; i++) {
-		std::cout << '(' << player[i].getDeclaration() << ") P" << i << ": ";
-		printDeck(player[i].getDeck());
+		std::cout << '(' << player->at(i).getDeclaration() << ") P" << i << ": ";
+		printDeck(player->at(i).getDeck());
 		std::cout << "      " << std::endl;
 	}
 }
@@ -86,7 +86,7 @@ void ConsoleView::displayTriumph(Card * triumph) {
 void ConsoleView::displayResult(){
 	cursorDown();
 	for (int i = 0; i < numberOfPlayers; i++) {
-		std::cout << 'P' << i << ": " << player[i].getTaken() << std::endl;
+		std::cout << 'P' << i << ": " << player->at(i).getTaken() << std::endl;
 	}
 }
 
@@ -175,7 +175,7 @@ int ConsoleView::declare(int round) {
 	int allow = 0;
 
 	for (int i = 0; i < numberOfPlayers; i++)
-		sum += player[i].getDeclaration();
+		sum += player->at(i).getDeclaration();
 
 	while (true) {
 		this->setCursor(0, 11);

@@ -3,7 +3,16 @@
 GameController::GameController(GameSettings& settings):Controller(settings){
 	this->settings = &settings;
 	game = new Game(this->settings->players.size());
-	view = new GameView(settings, game->player, &game->deck, &game->triumph, game->numberOfPlayers);
+	view = new GameView(settings, &game->player, &game->deck, &game->triumph, game->numberOfPlayers);
+	
+	gameData.players = &game->player;
+	gameData.playersSettings = &settings.players;
+	gameData.triumph = &game->triumph;
+	gameData.rounds = &settings.rounds;
+	gameData.table = game;
+	gameData.roundsPlayed = 0;
+	gameData.cardsOnTable = 0;
+	gameData.cardsPlayed = 0;
 }
 
 GameController::~GameController() {
@@ -12,47 +21,55 @@ GameController::~GameController() {
 }
 
 int GameController::start() {
-	for(int rounds = 0; rounds < settings->rounds.size(); rounds++){
-		game->prepareRound(settings->rounds[rounds]);
-		view->drawScene("Start");
-		view->drawScene("Declaration");
-		view->display();
+	std::ifstream file("a.txt", std::ios_base::binary);
+	file >> gameData;
+	file.close();
+	for(gameData.roundsPlayed; gameData.roundsPlayed < int(settings->rounds.size()); gameData.roundsPlayed++){
+		game->prepareRound(settings->rounds[gameData.roundsPlayed]);
 
-		if (waitForEvent("Declaration")) return CLOSEPROGRAM;
+		for (int i = 0; i < int(settings->players.size()); i++) {
+			if (game->player.at(i).getDeclaration() == -1) {
+				if (i == 0) {
+					view->drawScene("Start");
+					view->drawScene("Declaration");
+					view->display();
+					if (waitForEvent("Declaration")) return CLOSEPROGRAM;
+					game->setDeclaration(i, codes.x);
+				}
+				else
+					game->setDeclaration(i, game->ai->declare(1));
+			}
+		}
 
-		game->setDeclaration(codes.x);
-		view->drawScene("Start");
-		view->display();
-
-		for(int cards = 0; cards < settings->rounds[rounds]; cards++){
-			for (int i = game->getRoundWinner(), cardsOnTable = 0; cardsOnTable < int(settings->players.size()); cardsOnTable++) {
+		for(gameData.cardsPlayed; gameData.cardsPlayed < settings->rounds[gameData.roundsPlayed]; gameData.cardsPlayed++){
+			view->drawScene("Start");
+			view->drawScene("Table");
+			view->display();
+			for (gameData.playerToMove = game->getRoundWinner(), gameData.cardsOnTable = 0; gameData.cardsOnTable < int(settings->players.size()); gameData.cardsOnTable++) {
 				int card_id = -1;
-				if (settings->players[i] == 0) {
+				if (settings->players[gameData.playerToMove] == 0) {
 					if (waitForEvent("ThrowCard")) return CLOSEPROGRAM;
 					card_id = codes.x;
 				}
-				else
-					card_id = game->aiCardSelection(i, settings->players[i]);
-				game->makeAMove(i, card_id);
+				else card_id = game->aiCardSelection(gameData.playerToMove, settings->players[gameData.playerToMove]);
 				
+				game->makeAMove(gameData.playerToMove, card_id);
 				view->drawScene("Start");
 				view->drawScene("Table");
 				view->display();
 				//view->display();
 
 
-				if (i == settings->players.size() - 1) i = 0;
-				else i++;
+				if (gameData.playerToMove == settings->players.size() - 1) gameData.playerToMove = 0;
+				else gameData.playerToMove++;
 			}
 			game->sumUpTable();
-			view->drawScene("Start");
-			view->drawScene("Table");
-			view->display();
 		}
+		view->drawScene("Background");
+		view->display();
 		game->sumUpRound();
-		view->drawScene("Start");
-		view->drawScene("Table");
 	}
+	game->roundWinner = 0;
 	return MAINMENU;
 }
 
@@ -69,6 +86,10 @@ bool GameController::waitForEvent(sf::String event) {
 			return false;
 		}
 	}
+}
+
+void GameController::saveGame() {
+
 }
 
 void GameController::gameStart() {

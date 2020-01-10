@@ -16,13 +16,13 @@ class GameView : public View{
 	GCard* cards;
 	std::vector<Position> positions;
 
-	Player* player;
+	std::vector<Player>* player;
 	std::vector <Card*>* table;
 	Card** triumph;
 	int numberOfPlayers;
 
 public:
-	GameView(GameSettings& settings, Player* player, std::vector<Card*>* table, Card** triumph, int nOP = 0);
+	GameView(GameSettings& settings, std::vector<Player>* player, std::vector<Card*>* table, Card** triumph, int nOP = 0);
 	~GameView();
 	
 	void drawScene(const sf::String mode);

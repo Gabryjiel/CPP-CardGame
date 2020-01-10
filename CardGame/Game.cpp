@@ -2,7 +2,7 @@
 #include <windows.h>
 
 Game::~Game(){
-	delete[] player;
+	player.clear();
 	delete ai;
 }
 
@@ -16,20 +16,21 @@ void Game::start() {
 }
 
 void Game::prepareRound(int numberOfCards) {
-	this->setDefaultDeck();
-	//this->shuffle();
-
-	for (int i = 0; i < numberOfCards*numberOfPlayers; i++) {
-		if(i > 52) throw std::runtime_error("Not enough cards in the deck.");
-		player[i % numberOfPlayers].addCard(throwCard(0));
-	}
-	triumph = throwCard(0);
-	clearDeck();
-	this->deck.resize(numberOfPlayers);
-
-	for (int i = 0; i < numberOfPlayers; i++)
-		player[i].sortDeck();
 	
+	//this->shuffle();
+	if (player[0].getDeckSize() == 0) {
+		this->setDefaultDeck();
+		for (int i = 0; i < numberOfCards * numberOfPlayers; i++) {
+			if (i > 52) throw std::runtime_error("Not enough cards in the deck.");
+			player[i % numberOfPlayers].addCard(throwCard(0));
+		}
+		triumph = throwCard(0);
+		clearDeck();
+		this->deck.resize(numberOfPlayers);
+
+		for (int i = 0; i < numberOfPlayers; i++)
+			player[i].sortDeck();
+	}
 	console2->displayStart();
 //	console->displayStart();
 //	console->display();
@@ -45,11 +46,8 @@ void Game::prepareRound(int numberOfCards) {
 	
 }
 
-void Game::setDeclaration(int declaration){
-	for (int i = 0; i < numberOfPlayers; i++) {
-		if (player[i].getAI() == 0)
-			player[i].setDeclaration(declaration);
-	}
+void Game::setDeclaration(int player, int declaration){
+	this->player[player].setDeclaration(declaration);
 }
 
 int Game::cardSelector(int player) {

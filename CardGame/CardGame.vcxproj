@@ -146,6 +146,7 @@
     <ClCompile Include="ConsoleView.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="SaveData.cpp" />
     <ClCompile Include="View.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -166,6 +167,7 @@
     <ClInclude Include="ConsoleView.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SaveData.h" />
     <ClInclude Include="View.h" />
   </ItemGroup>
   <ItemGroup>

@@ -51,6 +51,11 @@ void Deck::addCard(int player, Card* newCard) {
 	this->deck[player] = newCard;
 }
 
+void Deck::addCard(int id) {
+	Card* temp = &allDeck[id];
+	this->deck.push_back(temp);
+}
+
 void Deck::addCard(Card* newCard) {
 	this->deck.push_back(newCard);
 }

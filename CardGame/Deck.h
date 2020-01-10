@@ -22,6 +22,7 @@ public:
 
 	bool checkForColor(int color);
 	void addCard(int player, Card* newCard);
+	void addCard(int id);
 	void addCard(Card* newCard);
 	bool shuffle();	//Randomizes position of Cards in the vector
 	Card * throwCard(int id);	//Removes Card from the vector with id

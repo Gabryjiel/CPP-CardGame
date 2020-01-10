@@ -4,7 +4,7 @@ Player::Player() {
 	AI = 1;
 	points = 0;
 	taken = 0;
-	declaration = 0;
+	declaration = -1;
 }
 
 Player::~Player(){}
