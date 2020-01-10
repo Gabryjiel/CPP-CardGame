@@ -54,17 +54,17 @@ void GameView::setPositions() {
 	float x = float(settings->window->getSize().x), y = float(settings->window->getSize().y);
 	float cardX = cards->getSize().width, cardY = cards->getSize().height;
 	handPos[0] = { x / 2 - cardX / 2 , y - cardY };
-	handPos[1] = { x - cardX, y * 5 / 7 };
-	handPos[2] = { x - cardX, y * 4 / 7 };
-	handPos[3] = { x - cardX, y * 3 / 7 };
+	handPos[1] = { x - cardX, y * 9 / 10 };
+	handPos[2] = { x - cardX, y * 7 / 10 };
+	handPos[3] = { x - cardX, y * 6 / 10 };
 	handPos[4] = { x * 9 / 10 - cardX * 1 / 2, 0 };
 	handPos[5] = { x * 7 / 10 - cardX * 1 / 2, 0 };
 	handPos[6] = { x * 5 / 10 - cardX * 1 / 2, 0 };
 	handPos[7] = { x * 3 / 10 - cardX * 1 / 2, 0 };
 	handPos[8] = { x * 1 / 10 - cardX * 1 / 2, 0 };
-	handPos[9] = { 0, y * 3 / 7 };
-	handPos[10] = { 0, y * 4 / 7 };
-	handPos[11] = { 0, y * 5 / 7 };
+	handPos[9] = { 0, y * 6 / 10 };
+	handPos[10] = { 0, y * 7 / 10 };
+	handPos[11] = { 0, y * 9 / 10 };
 
 	tablePos[0] = { x / 2 - cardX / 2 , y - cardY * 2.5f };
 	tablePos[1] = { x - cardX * 2.5f, y * 5 / 7 };

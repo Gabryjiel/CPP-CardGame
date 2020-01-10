@@ -2,7 +2,7 @@
 
 GameController::GameController(GameSettings& settings):Controller(settings){
 	this->settings = &settings;
-	game = new Game();
+	game = new Game(this->settings->players.size());
 	view = new GameView(settings, game->player, &game->deck, &game->triumph, game->numberOfPlayers);
 }
 
@@ -12,8 +12,8 @@ GameController::~GameController() {
 }
 
 int GameController::start() {
-	while (!settings->rounds.empty()) {
-		game->prepareRound(settings->rounds[0]);
+	for(int rounds = 0; rounds < settings->rounds.size(); rounds++){
+		game->prepareRound(settings->rounds[rounds]);
 		view->drawScene("Start");
 		view->drawScene("Declaration");
 		view->display();
@@ -24,7 +24,7 @@ int GameController::start() {
 		view->drawScene("Start");
 		view->display();
 
-		while (settings->rounds[0]--) {
+		for(int cards = 0; cards < settings->rounds[rounds]; cards++){
 			for (int i = game->getRoundWinner(), cardsOnTable = 0; cardsOnTable < int(settings->players.size()); cardsOnTable++) {
 				int card_id = -1;
 				if (settings->players[i] == 0) {
@@ -52,7 +52,6 @@ int GameController::start() {
 		game->sumUpRound();
 		view->drawScene("Start");
 		view->drawScene("Table");
-		settings->rounds.erase(settings->rounds.begin());
 	}
 	return MAINMENU;
 }
