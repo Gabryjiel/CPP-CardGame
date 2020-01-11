@@ -17,7 +17,7 @@ GameController::GameController(GameSettings& settings):Controller(settings){
 	gameData.roundsPlayed = 0;
 	gameData.cardsOnTable = 0;
 	gameData.cardsPlayed = 0;
-	gameData.playerToMove = 0;
+	gameData.playerToMove = -1;
 }
 
 GameController::~GameController() {
@@ -44,10 +44,10 @@ int GameController::start() {
 	prepareGame();
 
 	for(gameData.roundsPlayed; gameData.roundsPlayed < int(settings->rounds.size()); gameData.roundsPlayed++){ //Partia
-		game->prepareRound(settings->rounds[gameData.roundsPlayed]);
+		game->prepareRound(settings->rounds[gameData.roundsPlayed], settings->newGame);
 
 		for (int i = 0; i < int(settings->players.size()); i++) { // Deklaracje przez parti¹
-			if (game->player.at(i).getDeclaration() == -1) {
+			if (game->player.at(i).getDeclaration() == -1000) {
 				if (i == 0) {
 					view->drawScene("Start");
 					view->drawScene("Declaration");
@@ -61,7 +61,9 @@ int GameController::start() {
 		}
 
 		for(gameData.cardsPlayed; gameData.cardsPlayed < settings->rounds[gameData.roundsPlayed]; gameData.cardsPlayed++){ //Runda		
-			for (gameData.playerToMove = game->getRoundWinner(), gameData.cardsOnTable; gameData.cardsOnTable < int(settings->players.size()); gameData.cardsOnTable++) { //Rzucanie kart¹ przez wszytkich graczy
+			for (gameData.playerToMove, gameData.cardsOnTable; gameData.cardsOnTable < int(settings->players.size()); gameData.cardsOnTable++) { //Rzucanie kart¹ przez wszytkich graczy
+				if (gameData.playerToMove == -1) 
+					gameData.playerToMove = game->getRoundWinner();
 				int card_id = -1;
 				if (settings->players[gameData.playerToMove] == 0) {
 					view->clearCommands();
@@ -74,9 +76,6 @@ int GameController::start() {
 				else card_id = game->aiCardSelection(gameData.playerToMove, settings->players[gameData.playerToMove]);
 				
 				game->makeAMove(gameData.playerToMove, card_id);
-				//view->drawScene("Start");
-				//view->drawScene("Table");
-				//view->display();
 
 				if (gameData.playerToMove == settings->players.size() - 1) 
 					gameData.playerToMove = 0;
@@ -90,6 +89,7 @@ int GameController::start() {
 			if (waitForEvent("Proceed")) return MAINMENU;
 			game->sumUpTable();		
 			gameData.cardsOnTable = 0;
+			gameData.playerToMove = game->getRoundWinner();
 		}
 		gameData.cardsPlayed = 0;
 		view->drawScene("Background");
@@ -169,7 +169,12 @@ void GameController::checkEvent() {
 			break;
 
 		case sf::Event::KeyReleased:
-			command = "Key";
+			command = "KeyReleased";
+			codes.x = codes.y = action.key.code;
+			break;
+
+		case sf::Event::KeyPressed:
+			command = "KeyPressed";
 			codes.x = codes.y = action.key.code;
 			break;
 
@@ -197,8 +202,8 @@ void GameController::interpretEvent() {
 		command = view->checkCoords(codes);
 		selection = -1;
 	}
-	else if (command == "Key") {
-		if (view->getLowestCommand() > selection) selection = view->getLowestCommand() - 1;
+	else if (command == "KeyReleased") {
+		if (view->getLowestCommand() > selection) selection = view->getLowestCommand() - 1; //Warunek na wyj¹tek (kiedy pierwsze karty s¹ niedowzwolene)
 		if ((codes.x == 0 || codes.x == 71) && selection > view->getLowestCommand()) {//A lub strza³ka w lewo
 			selection--;
 		}
@@ -214,6 +219,21 @@ void GameController::interpretEvent() {
 			command = "MAINMENU";
 		}
 		
+	}
+	else if (command == "KeyPressed") {
+		if (codes.x == 60) {
+			view->drawScene("Start");
+			view->drawScene("Scoreboard");
+			view->display();
+			sf::Event action;	
+			while (true) {
+				view->checkEvent(action);
+				if (action.type == sf::Event::KeyReleased) {
+					if (action.key.code == 60)
+						break;
+				}
+			}
+		}
 	}
 	else if (command == "CLOSE") {
 		std::cout << "Closing";

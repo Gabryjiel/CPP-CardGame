@@ -84,5 +84,5 @@ void SaveData::reset(){
 	roundsPlayed = 0;
 	cardsOnTable = 0;
 	cardsPlayed = 0;
-	playerToMove = 0;
+	playerToMove = -1;
 }

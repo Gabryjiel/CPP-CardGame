@@ -25,30 +25,34 @@ void Button::setText(sf::String newString) {
 	background.setOutlineThickness(2);*/
 }
 
+void Button::setTextColour(sf::Color color){
+	text.setFillColor(color);
+}
+
 void Button::setPosition(float x, float y) {
 	background.setPosition(x, y);
 
 	float outlineThickness = background.getOutlineThickness();
 	background.setOutlineThickness(0);
-	int tmpX = int(x), tmpY = int(y);
-	
+	float tmpX = x, tmpY = y;
+
 	if (hFormat == 0)
-		tmpX = int(x) - 1;
+		tmpX = x - 1;
 	else if (hFormat == 1)
-		tmpX = int(x) - 1 + int(background.getGlobalBounds().width) / 2 - int(text.getLocalBounds().width)/2 - 1;
+		tmpX = x - 1 + int(background.getGlobalBounds().width) / 2 - text.getGlobalBounds().width/2 - 1;
 	else if (hFormat == 2)
-		tmpX = int(x) - 1 + int(background.getGlobalBounds().width) - int(text.getLocalBounds().width);
+		tmpX = x - 1 + background.getGlobalBounds().width - text.getGlobalBounds().width;
 
 	if (vFormat == 0)
-		tmpY = int(y) - text.getCharacterSize() + int(text.getLocalBounds().height);
+		tmpY = y - text.getCharacterSize() + text.getGlobalBounds().height;
 	else if (vFormat == 1)
-		tmpY = int(y) - text.getCharacterSize() + int(text.getLocalBounds().height) 
-		+ int(background.getGlobalBounds().height) / 2 - int(text.getLocalBounds().height) / 2;
+		tmpY = y - text.getCharacterSize() + text.getGlobalBounds().height
+		+ background.getGlobalBounds().height / 2 - text.getGlobalBounds().height / 2;
 	else if (vFormat == 2)
-		tmpY = int(y) - text.getCharacterSize() + int(text.getLocalBounds().height)
-		+ int(background.getGlobalBounds().height) - text.getCharacterSize();
+		tmpY = y - text.getCharacterSize() + text.getGlobalBounds().height
+		+ background.getGlobalBounds().height - text.getCharacterSize();
 	
-	text.setPosition(float(tmpX), float(tmpY));
+	text.setPosition(tmpX, tmpY);
 	background.setOutlineThickness(outlineThickness);
 }
 
@@ -71,6 +75,10 @@ void Button::setOutlineColor(sf::Color color) {
 
 void Button::setBackgroundColor(sf::Color color) {
 	background.setFillColor(color);
+}
+
+void Button::setTextSize(int size){
+	text.setCharacterSize(size);
 }
 
 bool Button::isOn(float x, float y) {

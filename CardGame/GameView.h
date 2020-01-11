@@ -39,10 +39,15 @@ public:
 	void drawResult();
 	void drawTable();
 	void displayWinner(int roundWinner);
+	void drawScen(const std::initializer_list<sf::String>& mode);
+	void drawScene(const sf::String mode ...);
 	void drawBackground();
 	int getTopColour();
 	bool allowedCard(int id);
+	int getNumberOfCardsInDeck(std::vector<Card*> vector);
 	void drawDeclaration();
+
+	void drawScoreboard();
 
 	int selectCard(int player);
 	int declare(int round);

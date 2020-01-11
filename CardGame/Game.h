@@ -42,7 +42,7 @@ public:
 	~Game();
 	
 	void start();
-	void prepareRound(int numberOfCards);
+	void prepareRound(int numberOfCards, bool newGame);
 	void setDeclaration(int player, int declaration);
 	void sumUpTable();
 	void sumUpRound();

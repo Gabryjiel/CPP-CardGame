@@ -7,7 +7,7 @@ Game::~Game(){
 }
 
 void Game::start() {
-	this->prepareRound(round);
+	this->prepareRound(round, true);
 	for (int i = round; i > 0; i--) {
 		this->singleRound();
 		this->sumUpRound();
@@ -15,12 +15,14 @@ void Game::start() {
 	this->endRound();
 }
 
-void Game::prepareRound(int numberOfCards) {
+void Game::prepareRound(int numberOfCards, bool newGame) {
 	//this->shuffle();
 	numberOfPlayers = player.size();
 	if (player[0].getDeckSize() == 0) {
-		player.clear();
-		player.resize(numberOfPlayers);
+		if (newGame) {
+			player.clear();
+			player.resize(numberOfPlayers);
+		}
 		setDefaultDeck();
 		for (int i = 0; i < numberOfCards * numberOfPlayers; i++) {
 			if (i > 52) throw std::runtime_error("Not enough cards in the deck.");
@@ -121,9 +123,9 @@ void Game::sumUpTable() {
 void Game::sumUpRound(){
 	for (int i = 0; i < numberOfPlayers; i++) {
 		if (player[i].getDeclaration() == player[i].getTaken()) {
-			player[i].setPoints(player[i].getPoints() + player[i].getDeclaration() + 10);
+			player[i].pointsScore(true);
 		}
-		else continue;
+		else player[i].pointsScore(false);
 	}
 }
 

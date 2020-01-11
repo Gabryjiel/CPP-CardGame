@@ -1,5 +1,6 @@
 #include "GameView.h"
 #include <Windows.h>
+#include <cstdarg>
 
 GameView::GameView(GameSettings& settings, std::vector<Player>* player, std::vector<Card*> *table, Card** triumph, int* code):View(settings){
 	this->cards = new Picture[52];
@@ -190,17 +191,39 @@ void GameView::drawScene(const sf::String mode) {
 		drawDeclaration();
 	else if (mode == "Table")
 		drawTable();
+	else if (mode == "Scoreboard")
+		drawScoreboard();
 }
 
+/*
+void GameView::drawScene(const sf::String mode...) {
+
+	for(auto el : va_arg(args, sf::String) ){
+		if (el == "Background")
+			drawBackground();
+		else if (el == "Start")
+			drawStart();
+		else if (el == "Result")
+			drawResult();
+		else if (el == "Declaration")
+			drawDeclaration();
+		else if (el == "Table")
+			drawTable();
+		else if (el == "Display")
+			settings->window->display();
+	}
+}*/
+
 void GameView::drawBackground() {
-	settings->window->clear(sf::Color(settings->backgroundColor[0], settings->backgroundColor[1], settings->backgroundColor[2]));
+	settings->window->clear(sf::Color(settings->backgroundColour));
 }
 
 int GameView::getTopColour() {
 	int topColour = -1;
-	for (int i = 0, counter = 0; i < int(table->size()); i++) {
-		if (table->at(i) == NULL)
-			counter++;
+	for (int i = 0; i < int(table->size()); i++) {
+		if (table->at(i) == NULL) {
+
+		}	
 		else if (topColour == -1)
 			topColour = table->at(i)->getColor();
 		else if (i > 0 && table->at(i - 1) == NULL)
@@ -244,8 +267,23 @@ bool GameView::allowedCard(int id) {
 	return true;
 }
 
+int GameView::getNumberOfCardsInDeck(std::vector<Card* > vector) {
+	int sum = 0;
+	for (auto i : vector) {
+		if (i != NULL)
+			sum++;
+	}
+	return sum;
+}
+
 void GameView::drawStart(){
 	drawBackground();
+	Button name;
+	name.setBackgroundColor(settings->primaryColour);
+	name.setOutlineColor(settings->outlineColour);
+	name.setOutlineThickness(1);
+	name.setFormating(1, 1);
+	name.setSize(30, 40);
 
 	for (int i = 0; i < numberOfPlayers; i++) { //Gracze
 		std::vector <Card*> deck = player->at(i).getDeck();
@@ -253,29 +291,37 @@ void GameView::drawStart(){
 
 		for (unsigned int j = 0; j < deck.size(); j++) { //Deck
 			int temp = deck[j]->getId();
-			
+			sf::Vector2f cardPos = positions[i].gap(j, deck.size(), cards->getSize(), positions[i].hand);
+
 			if (i == 0) {
-				sf::Vector2f cardPos = positions[i].gap(j, deck.size(), cards->getSize(), positions[i].hand);
-				if (j == *selection && commands[0].command == "ThrowCard") //Pozycja jeœli jest selection na karcie
+				if (j == *selection && commands.size() != NULL && commands[0].command == "ThrowCard") //Pozycja jeœli jest selection na karcie
 					cardPos.y -= (cards->getSize().height / 2);
 				cards[temp].setPosition(cardPos);
 
-				bool ameno = allowedCard(temp);
-				if (!ameno) {
-					cards[temp].setOpacityColour(sf::Color::Red);
-					cards[temp].setOpacityLevel(100);
-				}
-				else max++;
+				if (getNumberOfCardsInDeck(*table) != numberOfPlayers) {//Warunek na niekolorowanie kart jeœli ju¿ s¹ wszystkie na stole
+					bool ameno = allowedCard(temp);
+					if (!ameno) {
+						cards[temp].setOpacityColour(sf::Color::Red);
+						cards[temp].setOpacityLevel(100);
+					}
+					else max++;
 
-				if ((commands.size() == 0 || j != 0) && i == 0 && commands.size() < max && ameno)
-					addCommand(cards[temp].getSize(), "ThrowCard", j);
+					if ((commands.size() == 0 || j != 0) && i == 0 && commands.size() < max && ameno)
+						addCommand(cards[temp].getSize(), "ThrowCard", j);
+				}
 				draw(cards[temp]);
 				cards[temp].setOpacityLevel(0);
 			}
 			else {
-				back.setPosition(positions[i].gap(j, deck.size(), cards->getSize(), positions[i].hand));
+				back.setPosition(cardPos);
 				draw(back);
 			}
+			if (j == deck.size() - 1 && i != 0) {
+				name.setText("G" + std::to_string(i));
+				name.setPosition(cardPos.x, cardPos.y);
+				draw(name);
+			}
+
 		}
 	}
 	
@@ -302,7 +348,7 @@ void GameView::drawResult()
 
 int GameView::getBestCard() {
 	int max = -1, maxValue = 0, triumphColor = (*triumph)->getColor();
-	static int topColor = getTopColour();
+	int topColor = getTopColour();
 
 	for (int i = 0; i < int(table->size()); i++) {
 		Card* temp = table->at(i);
@@ -358,7 +404,7 @@ void GameView::drawDeclaration() {
 	declaration.setFormating(1, 1);
 	declaration.setText(L"Zadeklaruj ile sztychów weŸmiesz");
 	declaration.setSize(40, 470);
-	declaration.setPosition(float(settings->window->getSize().x / 2 - declaration.getGlobalBounds().width / 2), float(settings->window->getSize().y / 2));
+	declaration.setPosition(float(settings->window->getSize().x / 2 - declaration.getGlobalBounds().width / 2), float(settings->window->getSize().y / 4));
 	draw(declaration);
 
 	clearCommands();
@@ -377,6 +423,97 @@ void GameView::drawDeclaration() {
 		}
 	}
 
+}
+
+void GameView::drawScoreboard() {
+	sf::RectangleShape background, vLine, hLine;
+	background.setSize(sf::Vector2f(settings->window->getSize().x * 0.8f, settings->window->getSize().y * 0.8f));
+	background.setPosition(settings->window->getSize().x / 2 - background.getGlobalBounds().width / 2, settings->window->getSize().y / 2 - background.getGlobalBounds().height / 2);
+	background.setFillColor(sf::Color(255, 255, 255, 200));
+	background.setOutlineColor(sf::Color::Black);
+	background.setOutlineThickness(3);
+	
+	vLine.setSize(sf::Vector2f(5,background.getSize().y));
+	vLine.setFillColor(sf::Color::Black);
+
+	hLine.setSize(sf::Vector2f(background.getSize().x, 5));
+	hLine.setFillColor(sf::Color::Black);
+
+	Button text;
+	text.setFormating(1, 1);
+	text.setBackgroundColor(sf::Color(255, 255, 255, 0));
+	text.setSize(background.getGlobalBounds().height / 20, background.getGlobalBounds().width / (1 + settings->players.size()));
+	text.setTextColour(sf::Color::Black);
+
+	draw(background);
+
+	for (int i = 0; i <= settings->rounds.size(); i++) {
+		if (i == 0) {
+			text.setText("Runda");
+			text.setPosition(background.getPosition().x, background.getPosition().y);
+			draw(text);
+			text.setText("Suma");
+			text.setPosition(background.getPosition().x, background.getPosition().y + background.getGlobalBounds().height - text.getGlobalBounds().height - 4);
+			draw(text);
+			hLine.setPosition(background.getPosition().x, background.getPosition().y + text.getGlobalBounds().height);
+			draw(hLine);
+			hLine.setPosition(background.getPosition().x, background.getPosition().y + background.getGlobalBounds().height - text.getGlobalBounds().height - 8);
+			draw(hLine);
+		}
+		else {
+			text.setText(std::to_string(settings->rounds[i - 1]));
+			text.setTextSize(20);
+			text.setPosition(background.getPosition().x, background.getPosition().y + i * text.getGlobalBounds().height);
+			draw(text);
+		}
+	}
+
+	hLine.setSize(sf::Vector2f(hLine.getSize().x, 1));
+
+	for (int i = 0; i < numberOfPlayers; i++) {
+		text.setTextSize(30);
+		text.setText("G" + std::to_string(i));
+		text.setPosition(background.getPosition().x + (i + 1) * text.getGlobalBounds().width, background.getPosition().y);
+		vLine.setPosition(background.getPosition().x + (i + 1) * text.getGlobalBounds().width, background.getPosition().y);
+		draw(vLine);
+		draw(text);
+		for (int j = 0; j < settings->rounds.size(); j++) {
+			if (i == 0) {
+				hLine.setPosition(background.getPosition().x, background.getPosition().y + (j + 1) * text.getGlobalBounds().height);
+				draw(hLine);
+			}
+			text.setTextSize(20);
+			text.setSize(background.getGlobalBounds().height / 20, background.getGlobalBounds().width / (1 + settings->players.size()));
+			int points = player->at(i).getPoints(j);
+			
+			if (points == 0) {
+				if (player->at(i).getPoints(j + 1) == 1000) {
+					text.setText("0");
+				}
+				else {
+					text.setText(std::to_string(points));
+					text.setPosition(background.getPosition().x + (i + 1) * text.getGlobalBounds().width, background.getPosition().y + (j + 1) * text.getGlobalBounds().height);
+					draw(text);
+					text.setText("###");
+				}
+			}
+			else if (points == 1000 || points == -1000)
+				text.setText("");
+			else if (points < 0) {
+				text.setText(std::to_string(player->at(i).getPoints(j) * (-1)));
+				text.setPosition(background.getPosition().x + (i + 1) * text.getGlobalBounds().width, background.getPosition().y + (j + 1) * text.getGlobalBounds().height);
+				draw(text);
+				text.setText("###");
+			}
+			else text.setText(std::to_string(player->at(i).getPoints(j)));
+
+			text.setPosition(background.getPosition().x + (i + 1) * text.getGlobalBounds().width, background.getPosition().y + (j + 1) * text.getGlobalBounds().height);
+			draw(text);
+		}
+		text.setText(std::to_string(player->at(i).getPoints()));
+		text.setPosition(background.getPosition().x + text.getGlobalBounds().width * (i+1), background.getPosition().y + background.getGlobalBounds().height - text.getGlobalBounds().height - 4);
+		draw(text);
+	}
 }
 
 int GameView::selectCard(int player){
