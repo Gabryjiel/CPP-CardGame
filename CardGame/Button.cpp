@@ -18,11 +18,11 @@ void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 
 void Button::setText(sf::String newString) {
 	text.setString(newString);
-	sf::FloatRect a = this->text.getGlobalBounds();
+	/*sf::FloatRect a = this->text.getGlobalBounds();
 	background.setSize(sf::Vector2f(a.width, float(text.getCharacterSize())));
 	background.setFillColor(sf::Color::Red);
 	background.setOutlineColor(sf::Color::Red);
-	background.setOutlineThickness(2);
+	background.setOutlineThickness(2);*/
 }
 
 void Button::setPosition(float x, float y) {

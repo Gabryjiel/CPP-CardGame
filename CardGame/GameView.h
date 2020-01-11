@@ -1,6 +1,6 @@
 #pragma once
 #include "View.h"
-#include "GCard.h"
+#include "Picture.h"
 #include "Player.h"
 #include "GameSettings.h"
 #include "Button.h"
@@ -13,7 +13,8 @@ typedef struct{
 }Position;
 
 class GameView : public View{
-	GCard* cards;
+	Picture* cards;
+	Picture back;
 	std::vector<Position> positions;
 
 	std::vector<Player>* player;
@@ -21,13 +22,15 @@ class GameView : public View{
 	Card** triumph;
 	int numberOfPlayers;
 
+	int getBestCard();
 public:
-	GameView(GameSettings& settings, std::vector<Player>* player, std::vector<Card*>* table, Card** triumph, int nOP = 0);
+	GameView(GameSettings& settings, std::vector<Player>* player, std::vector<Card*>* table, Card** triumph);
 	~GameView();
 	
 	void drawScene(const sf::String mode);
 	bool checkEvent(sf::Event& event);
 	sf::String checkCoords(sf::Vector2u& codes);
+	void start();
 	
 	void drawStart();
 	void drawTriumph();

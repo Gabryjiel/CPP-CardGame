@@ -59,6 +59,9 @@ sf::String MenuView::checkCoords(sf::Vector2u& coords) {
 	return "";
 }
 
+void MenuView::start() {
+
+}
 /*
 void MenuInterface::menu() {
 	setOptions();

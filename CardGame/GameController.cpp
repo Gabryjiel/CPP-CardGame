@@ -3,8 +3,8 @@
 GameController::GameController(GameSettings& settings):Controller(settings){
 	this->settings = &settings;
 	game = new Game(this->settings->players.size());
-	view = new GameView(settings, &game->player, &game->deck, &game->triumph, game->numberOfPlayers);
-	
+	//game = new Game();
+	view = new GameView(settings, &game->player, &game->deck, &game->triumph);
 	gameData.players = &game->player;
 	gameData.playersSettings = &settings.players;
 	gameData.triumph = &game->triumph;
@@ -13,6 +13,7 @@ GameController::GameController(GameSettings& settings):Controller(settings){
 	gameData.roundsPlayed = 0;
 	gameData.cardsOnTable = 0;
 	gameData.cardsPlayed = 0;
+	gameData.playerToMove = 0;
 }
 
 GameController::~GameController() {
@@ -20,20 +21,34 @@ GameController::~GameController() {
 	delete view;
 }
 
+void GameController::prepareGame() {
+	if (game->player.size() == 0) {	//Przystosowanie gry jeœli jest to NowaGra
+		game->player.clear();
+		game->player.resize(gameData.playersSettings->size());
+	}
+	
+	if (settings->newGame == true) {
+		gameData.reset();
+		game->player.clear();
+		game->player.resize(gameData.playersSettings->size());
+		settings->newGame = false;
+	}
+}
+
 int GameController::start() {
-	std::ifstream file("a.txt", std::ios_base::binary);
-	file >> gameData;
-	file.close();
-	for(gameData.roundsPlayed; gameData.roundsPlayed < int(settings->rounds.size()); gameData.roundsPlayed++){
+	view->start();
+	prepareGame();
+
+	for(gameData.roundsPlayed; gameData.roundsPlayed < int(settings->rounds.size()); gameData.roundsPlayed++){ //Partia
 		game->prepareRound(settings->rounds[gameData.roundsPlayed]);
 
-		for (int i = 0; i < int(settings->players.size()); i++) {
+		for (int i = 0; i < int(settings->players.size()); i++) { // Deklaracje przez parti¹
 			if (game->player.at(i).getDeclaration() == -1) {
 				if (i == 0) {
 					view->drawScene("Start");
 					view->drawScene("Declaration");
 					view->display();
-					if (waitForEvent("Declaration")) return CLOSEPROGRAM;
+					if (waitForEvent("Declaration")) return MAINMENU;
 					game->setDeclaration(i, codes.x);
 				}
 				else
@@ -41,14 +56,15 @@ int GameController::start() {
 			}
 		}
 
-		for(gameData.cardsPlayed; gameData.cardsPlayed < settings->rounds[gameData.roundsPlayed]; gameData.cardsPlayed++){
+		for(gameData.cardsPlayed; gameData.cardsPlayed < settings->rounds[gameData.roundsPlayed]; gameData.cardsPlayed++){ //Runda
 			view->drawScene("Start");
 			view->drawScene("Table");
 			view->display();
-			for (gameData.playerToMove = game->getRoundWinner(), gameData.cardsOnTable = 0; gameData.cardsOnTable < int(settings->players.size()); gameData.cardsOnTable++) {
+		
+			for (gameData.playerToMove = game->getRoundWinner(), gameData.cardsOnTable; gameData.cardsOnTable < int(settings->players.size()); gameData.cardsOnTable++) { //Rzucanie kart¹ przez wszytkich graczy
 				int card_id = -1;
 				if (settings->players[gameData.playerToMove] == 0) {
-					if (waitForEvent("ThrowCard")) return CLOSEPROGRAM;
+					if (waitForEvent("ThrowCard")) return MAINMENU;
 					card_id = codes.x;
 				}
 				else card_id = game->aiCardSelection(gameData.playerToMove, settings->players[gameData.playerToMove]);
@@ -57,35 +73,54 @@ int GameController::start() {
 				view->drawScene("Start");
 				view->drawScene("Table");
 				view->display();
-				//view->display();
 
-
-				if (gameData.playerToMove == settings->players.size() - 1) gameData.playerToMove = 0;
+				if (gameData.playerToMove == settings->players.size() - 1) 
+					gameData.playerToMove = 0;
 				else gameData.playerToMove++;
 			}
-			game->sumUpTable();
+
+			view->drawScene("Start");
+			view->drawScene("Table");
+			view->addCommand(sf::FloatRect(0, 0, settings->window->getSize().x, settings->window->getSize().y), "Proceed", 0);
+			view->display();
+			if (waitForEvent("Proceed")) return MAINMENU;
+			game->sumUpTable();		
+			gameData.cardsOnTable = 0;
 		}
+		gameData.cardsPlayed = 0;
 		view->drawScene("Background");
 		view->display();
 		game->sumUpRound();
 	}
 	game->roundWinner = 0;
+	gameData.reset();
 	return MAINMENU;
 }
 
 bool GameController::waitForEvent(sf::String event) {
+	bool result;
 	while (true) {
 		while (command == "")
 			checkEvent();
 		interpretEvent();
 
-		if (command == "CLOSE") return true;
+		if (command == "CLOSE") {
+			settings->window->close();
+			result = true;
+			break;
+		}
+		else if (command == "MAINMENU") {
+			result = true;
+			break;
+		}
 		else if (command == event) {
-			view->clearCommands();
-			command = "";
-			return false;
+			result = false;
+			break;
 		}
 	}
+	view->clearCommands();
+	command = "";
+	return result;
 }
 
 void GameController::saveGame() {
@@ -168,16 +203,20 @@ void GameController::interpretEvent() {
 	if (command == "MouseLeft")
 		command = view->checkCoords(codes);
 	else if (command == "Key") {
-		if ((codes.x == 'w' || codes.x == 'W') && selection > 0) {
+		if ((codes.x == 'a' || codes.x == 'A') && selection > 0) {
 			selection--;
 		}
-		else if ((codes.x == 's' || codes.x == 'S') && selection < game->player[0].getDeckSize()) {
+		else if ((codes.x == 'd' || codes.x == 'D') && selection < game->player[0].getDeckSize()) {
 			selection++;
 		}
-		else if (codes.x == 13) {
+		else if (codes.x == 58) {
 			command = "ThrowCard";
 			codes.x = codes.y = selection;
 		}
+		else if (codes.x == 36) {
+			command = "MAINMENU";
+		}
+		
 	}
 	else if (command == "CLOSE") {
 		std::cout << "Closing";

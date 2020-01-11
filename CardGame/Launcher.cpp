@@ -8,5 +8,8 @@ void Launcher::startGame() {
 			mode = menu_controller->start();
 		else if (mode == 2)
 			mode = game_controller->start();
+
+		if (settings->window->isOpen() == false)
+			break;
 	}
 }

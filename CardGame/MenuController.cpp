@@ -20,13 +20,16 @@ int MenuController::start() {
 		interpretEvent();
 
 		if (command == "QuickGame") {
+			settings->players = { 0, 1111, 2222, 3333 };
+			settings->rounds = { 5, 4};
+			settings->newGame = true;
 			return STARTGAME;
 		}
 		else if (command == "CustomGame" || command == "Options" || command == "MainMenu") {
 			view->drawScene(command);
 		}
-		else if (command == "Continue") {
-
+		else if (command == "Continue" && !settings->rounds.empty()) {
+			return STARTGAME;
 		}
 		else if (command == "CLOSE") {
 			view->close();

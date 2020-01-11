@@ -9,7 +9,7 @@ class Game : public Deck{
 	//friend Controller::Controller();
 	int round; 
 	int roundWinner;
-	const int numberOfPlayers;
+	int numberOfPlayers;
 
 	std::vector<Player> player;
 	Card* triumph;
@@ -31,15 +31,11 @@ class Game : public Deck{
 	void singleRound();
 
 public:
-	Game(int nOP = 4) :numberOfPlayers(nOP) {
+	Game(int nOP) {
+		numberOfPlayers = nOP;
 		player.resize(numberOfPlayers);
 		this->deck.resize(numberOfPlayers);
 		ai = new AI;
-		if (52 % nOP == 0)
-			round = 52 / nOP - 1;
-		else round = 52 / nOP;
-
-		player[0].setAI(false);
 		roundWinner = 0;
 		console2 = new ConsoleView(&player, &deck, triumph, nOP);
 	};

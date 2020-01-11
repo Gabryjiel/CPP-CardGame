@@ -88,14 +88,14 @@
     <ClCompile Include="Button.cpp">
       <Filter>View\XOther</Filter>
     </ClCompile>
-    <ClCompile Include="GCard.cpp">
-      <Filter>View\XOther</Filter>
-    </ClCompile>
     <ClCompile Include="ConsoleView.cpp">
       <Filter>View\XOther</Filter>
     </ClCompile>
     <ClCompile Include="SaveData.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Picture.cpp">
+      <Filter>View\XOther</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -147,14 +147,14 @@
     <ClInclude Include="ConsoleView.h">
       <Filter>View\XOther</Filter>
     </ClInclude>
-    <ClInclude Include="GCard.h">
-      <Filter>View\XOther</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Resources</Filter>
     </ClInclude>
     <ClInclude Include="SaveData.h">
       <Filter>View\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Picture.h">
+      <Filter>View\XOther</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

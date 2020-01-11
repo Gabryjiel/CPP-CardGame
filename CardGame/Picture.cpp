@@ -1,21 +1,22 @@
-#include "GCard.h"
+#include "Picture.h"
 
-GCard::GCard() {
-
+Picture::Picture() {
+	opacity.setFillColor(sf::Color(0, 0, 0, 0));
 }
 
-void GCard::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void Picture::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	target.draw(sprite);
+	target.draw(opacity);
 }
 
-void GCard::loadImage(sf::String path) {
+void Picture::loadImage(sf::String path) {
 	texture.loadFromFile(path);
 	sprite.setTexture(texture);
-	sprite.scale(float(0.15), float(0.15));
+	opacity.setSize(sf::Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height));
 }
 
 
-void GCard::loadImageA() {
+void Picture::loadImageA() {
 		HRSRC rsrcData = FindResource(NULL, MAKEINTRESOURCE(IDB_PNG1), RT_RCDATA);
 		if (!rsrcData)
 			throw std::runtime_error("Failed to find resource.");
@@ -36,21 +37,34 @@ void GCard::loadImageA() {
 			throw std::runtime_error("Failed to load image from memory.");
 		texture.loadFromImage(image);
 		sprite.setTexture(texture);
-		sprite.scale(float(0.15), float(0.15));
+		opacity.setSize(sf::Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height));
 }
 
-sf::FloatRect GCard::getSize(){
+sf::FloatRect Picture::getSize(){
 	return this->sprite.getGlobalBounds();
 }
 
-void GCard::setPosition(float x, float y){
+void Picture::setPosition(float x, float y){
 	sprite.setPosition(x, y);
+	opacity.setPosition(x, y);
 }
 
-void GCard::setPosition(sf::Vector2f vec) {
+void Picture::setPosition(sf::Vector2f vec) {
 	sprite.setPosition(vec);
+	opacity.setPosition(vec);
 }
 
-void GCard::scale(float x, float y){
+void Picture::scale(float x, float y){
 	sprite.scale(x, y);
+	opacity.scale(x, y);
+}
+
+void Picture::setOpacityLevel(int opacityLevel){
+	sf::Color colour = opacity.getFillColor();
+	colour.a = opacityLevel;
+	opacity.setFillColor(colour);
+}
+
+void Picture::setOpacityColour(sf::Color color){
+	opacity.setFillColor(color);
 }

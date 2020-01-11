@@ -16,31 +16,29 @@ void Game::start() {
 }
 
 void Game::prepareRound(int numberOfCards) {
-	
 	//this->shuffle();
+	numberOfPlayers = player.size();
 	if (player[0].getDeckSize() == 0) {
-		this->setDefaultDeck();
+		player.clear();
+		player.resize(numberOfPlayers);
+		setDefaultDeck();
 		for (int i = 0; i < numberOfCards * numberOfPlayers; i++) {
 			if (i > 52) throw std::runtime_error("Not enough cards in the deck.");
 			player[i % numberOfPlayers].addCard(throwCard(0));
 		}
 		triumph = throwCard(0);
 		clearDeck();
-		this->deck.resize(numberOfPlayers);
+		deck.resize(numberOfPlayers);
 
 		for (int i = 0; i < numberOfPlayers; i++)
 			player[i].sortDeck();
 	}
 	console2->displayStart();
-//	console->displayStart();
-//	console->display();
 	
 
-	for (int i = 0; i < this->numberOfPlayers; i++) {
-		int aiLevel = this->player[i].getAI();
+	for (int i = 0; i < player.size(); i++) {
+		int aiLevel = player[i].getAI();
 		if (!aiLevel)
-	//		console->declare(round);
-//		else
 			ai->declare(aiLevel);
 	}
 	
@@ -96,25 +94,24 @@ void Game::singleRound() {
 }
 
 void Game::sumUpTable() {
-	Card* analyzer;
-	int topColor = deck[0]->getColor();
 	int max = 0;
-	for (unsigned int i = 0; i < deck.size(); i++) {
-		analyzer = deck[i];
-		
-		int cardValue = analyzer->getFigure();
-		
-		if (analyzer->getColor() == triumph->getColor()) 
-			cardValue += 200;
-		else if (analyzer->getColor() == topColor) 
-			cardValue += 100;
-
-		if (cardValue > max) {
-			max = cardValue;
-			roundWinner = (roundWinner + i) % numberOfPlayers;
+	int topColor = deck[roundWinner]->getColor();
+	
+	for (int i = 0; i < int(deck.size()); i++) {
+		Card* temp = deck[i];
+		if (temp != NULL) {
+			int tempId = deck[i]->getId();
+			if (deck[i]->getColor() == topColor)
+				tempId += 100;
+			if (deck[i]->getColor() == triumph->getColor())
+				tempId += 200;
+			if (tempId > max) {
+				roundWinner = i;
+				max = tempId;
+			}
 		}
-		
 	}
+
 	player[roundWinner].setTaken(player[roundWinner].getTaken() + 1);
 	clearDeck();
 	this->deck.resize(numberOfPlayers);

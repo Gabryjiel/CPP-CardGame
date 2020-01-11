@@ -79,3 +79,10 @@ std::istream& operator>>(std::istream& input, SaveData& save){
 	input >> save.roundsPlayed >> save.cardsPlayed >> save.playerToMove >> save.cardsOnTable;
 	return input;
 }
+
+void SaveData::reset(){
+	roundsPlayed = 0;
+	cardsOnTable = 0;
+	cardsPlayed = 0;
+	playerToMove = 0;
+}

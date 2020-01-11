@@ -17,4 +17,5 @@ struct SaveData {
 
 	friend std::ostream& operator<<(std::ostream& output, const SaveData& save);
 	friend std::istream& operator>>(std::istream& input, SaveData& save);
+	void reset();
 };

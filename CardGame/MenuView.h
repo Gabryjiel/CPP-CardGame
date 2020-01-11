@@ -14,4 +14,5 @@ public:
 	void drawScene(const sf::String menu);
 	bool checkEvent(sf::Event& event);
 	sf::String checkCoords(sf::Vector2u &coords);
+	void start();
 };
