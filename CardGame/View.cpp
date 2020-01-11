@@ -27,6 +27,24 @@ int View::getCommandsSize(){
 	return commands.size();
 }
 
+int View::getLowestCommand(){
+	int min = INT_FAST16_MAX;
+	for (auto element : commands) {
+		if (element.code < min)
+			min = element.code;
+	}
+	return min;
+}
+
+int View::getHighestCommand(){
+	int max = 0;
+	for (auto element : commands) {
+		if (element.code > max)
+			max = element.code;
+	}
+	return max;
+}
+
 void View::clearCommands(){
 	commands.clear();
 }

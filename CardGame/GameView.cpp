@@ -362,7 +362,7 @@ void GameView::drawDeclaration() {
 	draw(declaration);
 
 	clearCommands();
-	declaration.setSize(40, 30);
+	declaration.setSize(40, 40);
 
 	for (int i = 0; i < numberOfCards + 1; i++) {
 		if (sum + i != numberOfCards || sum == 0 || numberOfCards < 3) {
@@ -379,13 +379,11 @@ void GameView::drawDeclaration() {
 
 }
 
-int GameView::selectCard(int player)
-{
+int GameView::selectCard(int player){
 	return 0;
 }
 
-int GameView::declare(int round)
-{
+int GameView::declare(int round){
 	return 0;
 }
 

@@ -198,10 +198,11 @@ void GameController::interpretEvent() {
 		selection = -1;
 	}
 	else if (command == "Key") {
-		if ((codes.x == 0 || codes.x == 71) && selection > 0) {//A lub strza³ka w lewo
+		if (view->getLowestCommand() > selection) selection = view->getLowestCommand() - 1;
+		if ((codes.x == 0 || codes.x == 71) && selection > view->getLowestCommand()) {//A lub strza³ka w lewo
 			selection--;
 		}
-		else if ((codes.x == 3 || codes.x == 72) && selection < view->getCommandsSize() - 1) {//D lub strza³ka w prawo
+		else if ((codes.x == 3 || codes.x == 72) && selection < view->getHighestCommand()) {//D lub strza³ka w prawo
 			selection++;
 		}
 		else if (codes.x == 58 || codes.x == 73 || codes.x == 22) {//Enter lub strza³ka w górê lub w

@@ -24,6 +24,8 @@ public:
 	void display();
 	void addCommand(sf::FloatRect hitbox, sf::String command, int code);
 	int getCommandsSize();
+	int getLowestCommand();
+	int getHighestCommand();
 	void clearCommands();;
 };
 
