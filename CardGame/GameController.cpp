@@ -218,7 +218,6 @@ void GameController::interpretEvent() {
 		else if (codes.x == 36) {//Escape
 			command = "MAINMENU";
 		}
-		
 	}
 	else if (command == "KeyPressed") {
 		if (codes.x == 60) {
@@ -231,6 +230,10 @@ void GameController::interpretEvent() {
 				if (action.type == sf::Event::KeyReleased) {
 					if (action.key.code == 60)
 						break;
+				}
+				else if (action.type == sf::Event::Closed) {
+						command = "CLOSE";
+					break;
 				}
 			}
 		}
