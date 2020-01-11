@@ -3,7 +3,7 @@
 #include <Windows.h>
 #include "resource.h"
 
-class Picture : public sf::Sprite{
+class Picture : public sf::Drawable{
 	sf::Image image;
 	sf::Texture texture;
 	sf::Sprite sprite;
@@ -21,6 +21,7 @@ public:
 	void setPosition(float x, float y);
 	void setPosition(sf::Vector2f vec);
 	void scale(float x, float y);
-	void setOpacityLevel(int opacityLevel);
 	void setOpacityColour(sf::Color color);
+	void setOpacityLevel(int opacityLevel);
+	int getOpacityLevel();
 };

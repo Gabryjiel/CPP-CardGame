@@ -3,8 +3,12 @@
 GameController::GameController(GameSettings& settings):Controller(settings){
 	this->settings = &settings;
 	game = new Game(this->settings->players.size());
-	//game = new Game();
-	view = new GameView(settings, &game->player, &game->deck, &game->triumph);
+	view = new GameView(settings, &game->player, &game->deck, &game->triumph, &selection);
+
+	command = "";
+	codes.x = codes.y = 0;
+	selection = -1;
+
 	gameData.players = &game->player;
 	gameData.playersSettings = &settings.players;
 	gameData.triumph = &game->triumph;
@@ -56,23 +60,23 @@ int GameController::start() {
 			}
 		}
 
-		for(gameData.cardsPlayed; gameData.cardsPlayed < settings->rounds[gameData.roundsPlayed]; gameData.cardsPlayed++){ //Runda
-			view->drawScene("Start");
-			view->drawScene("Table");
-			view->display();
-		
+		for(gameData.cardsPlayed; gameData.cardsPlayed < settings->rounds[gameData.roundsPlayed]; gameData.cardsPlayed++){ //Runda		
 			for (gameData.playerToMove = game->getRoundWinner(), gameData.cardsOnTable; gameData.cardsOnTable < int(settings->players.size()); gameData.cardsOnTable++) { //Rzucanie kart¹ przez wszytkich graczy
 				int card_id = -1;
 				if (settings->players[gameData.playerToMove] == 0) {
+					view->clearCommands();
+					view->drawScene("Start");
+					view->drawScene("Table");
+					view->display();
 					if (waitForEvent("ThrowCard")) return MAINMENU;
 					card_id = codes.x;
 				}
 				else card_id = game->aiCardSelection(gameData.playerToMove, settings->players[gameData.playerToMove]);
 				
 				game->makeAMove(gameData.playerToMove, card_id);
-				view->drawScene("Start");
-				view->drawScene("Table");
-				view->display();
+				//view->drawScene("Start");
+				//view->drawScene("Table");
+				//view->display();
 
 				if (gameData.playerToMove == settings->players.size() - 1) 
 					gameData.playerToMove = 0;
@@ -81,7 +85,7 @@ int GameController::start() {
 
 			view->drawScene("Start");
 			view->drawScene("Table");
-			view->addCommand(sf::FloatRect(0, 0, settings->window->getSize().x, settings->window->getSize().y), "Proceed", 0);
+			view->addCommand(sf::FloatRect(0, 0, settings->window->getSize().x, settings->window->getSize().y), "Proceed", selection);
 			view->display();
 			if (waitForEvent("Proceed")) return MAINMENU;
 			game->sumUpTable();		
@@ -117,6 +121,19 @@ bool GameController::waitForEvent(sf::String event) {
 			result = false;
 			break;
 		}
+		else command = "";
+
+		if (event == "Declaration") {
+			view->drawScene("Start");
+			view->drawScene("Declaration");
+			view->display();
+		}
+		else if (event == "ThrowCard") {
+			view->drawScene("Start");
+			view->drawScene("Table");
+			view->display();
+		}
+		
 	}
 	view->clearCommands();
 	command = "";
@@ -125,44 +142,6 @@ bool GameController::waitForEvent(sf::String event) {
 
 void GameController::saveGame() {
 
-}
-
-void GameController::gameStart() {
-	settings->window->setActive(false);
-	std::thread eventThread(&GameController::gameStart, this);
-	int mode = 1;
-	while (true) {
-		command = "";
-		codes.x = codes.y = 0;
-		while (command == "")
-			checkEvent();
-			
-		interpretEvent();
-
-		if (command == "Declaration")
-			command = "";
-		else if (command == "CLOSE") {
-			eventThread.join();
-			mode = 0;
-			command = "";
-			break;
-		}
-		
-	}
-	return ;
-}
-
-bool GameController::checkCommand(const sf::String command) {
-	if (this->command == command) return true;
-	return false;
-}
-
-inline void GameController::waitForCommand(const sf::String command){
-	bool result = false;
-	while (true) {
-		if (this->command == "CLOSE") return;
-		if (this->command == command) break;
-	}
 }
 
 void GameController::checkEvent() {
@@ -183,7 +162,13 @@ void GameController::checkEvent() {
 			codes.y = action.mouseButton.y;
 			break;
 
-		case sf::Event::KeyPressed:
+		case sf::Event::MouseMoved:
+			command = "MouseMove";
+			codes.x = action.mouseButton.button;
+			codes.y = action.mouseButton.x;
+			break;
+
+		case sf::Event::KeyReleased:
 			command = "Key";
 			codes.x = codes.y = action.key.code;
 			break;
@@ -198,22 +183,33 @@ void GameController::checkEvent() {
 }
 
 void GameController::interpretEvent() {
-	static int selection;
 
-	if (command == "MouseLeft")
+	if (command == "MouseMove") {
 		command = view->checkCoords(codes);
+		if (command != "") {
+			selection = codes.x;
+			command = "";
+		}
+		else selection = -1;
+	}
+
+	if (command == "MouseLeft") {
+		command = view->checkCoords(codes);
+		selection = -1;
+	}
 	else if (command == "Key") {
-		if ((codes.x == 'a' || codes.x == 'A') && selection > 0) {
+		if ((codes.x == 0 || codes.x == 71) && selection > 0) {//A lub strza³ka w lewo
 			selection--;
 		}
-		else if ((codes.x == 'd' || codes.x == 'D') && selection < game->player[0].getDeckSize()) {
+		else if ((codes.x == 3 || codes.x == 72) && selection < view->getCommandsSize() - 1) {//D lub strza³ka w prawo
 			selection++;
 		}
-		else if (codes.x == 58) {
-			command = "ThrowCard";
+		else if (codes.x == 58 || codes.x == 73 || codes.x == 22) {//Enter lub strza³ka w górê lub w
+			command = view->checkCode(selection);
 			codes.x = codes.y = selection;
+			selection = -1;
 		}
-		else if (codes.x == 36) {
+		else if (codes.x == 36) {//Escape
 			command = "MAINMENU";
 		}
 		

@@ -17,11 +17,13 @@ public:
 	virtual void drawScene(const sf::String mode) = 0;
 	virtual bool checkEvent(sf::Event& event) = 0;
 	virtual sf::String checkCoords(sf::Vector2u& codes) = 0;
+	virtual sf::String checkCode(int code) = 0;
 	virtual void start() = 0;
 
 	void close();
 	void display();
 	void addCommand(sf::FloatRect hitbox, sf::String command, int code);
+	int getCommandsSize();
 	void clearCommands();;
 };
 

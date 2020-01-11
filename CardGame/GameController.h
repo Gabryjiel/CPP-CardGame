@@ -11,8 +11,10 @@ class GameController : public Controller{
 	
 	Game* game;
 	SaveData gameData;
+
 	sf::String command;
 	sf::Vector2u codes;
+	int selection;
 
 	void userAction();
 	void checkEvent();

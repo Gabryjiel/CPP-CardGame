@@ -1,11 +1,12 @@
 #include "GameView.h"
 #include <Windows.h>
 
-GameView::GameView(GameSettings& settings, std::vector<Player>* player, std::vector<Card*> *table, Card** triumph):View(settings){
+GameView::GameView(GameSettings& settings, std::vector<Player>* player, std::vector<Card*> *table, Card** triumph, int* code):View(settings){
 	this->cards = new Picture[52];
 	this->player = player;
 	this->table = table;
 	this->triumph = triumph;
+	this->selection = code;
 	loadCards();
 }
 
@@ -195,27 +196,89 @@ void GameView::drawBackground() {
 	settings->window->clear(sf::Color(settings->backgroundColor[0], settings->backgroundColor[1], settings->backgroundColor[2]));
 }
 
+int GameView::getTopColour() {
+	int topColour = -1;
+	for (int i = 0, counter = 0; i < int(table->size()); i++) {
+		if (table->at(i) == NULL)
+			counter++;
+		else if (topColour == -1)
+			topColour = table->at(i)->getColor();
+		else if (i > 0 && table->at(i - 1) == NULL)
+			topColour = table->at(i)->getColor();
+	}
+	return topColour;
+}
+
+bool GameView::allowedCard(int id) {
+	if (getTopColour() != -1) {
+
+		std::vector <Card*> deck = player->at(0).getDeck();
+		
+		int cTopColor = 0, cTriumphColor = 0;
+		for (int x = 0; x < deck.size(); x++) {
+			if (deck[x]->getColor() == getTopColour()) {
+				cTopColor++;
+			}
+			if (deck[x]->getColor() == (*triumph)->getColor()) {
+				cTriumphColor++;
+			}
+		}
+
+		for (int x = 0, nrCard = 0; x < deck.size(); x++) {
+			if (cTopColor == 0) {
+				if (cTriumphColor != 0) {
+					if (deck[x]->getColor() != (*triumph)->getColor()) {
+						if (id == deck[x]->getId())
+							return false;
+					}
+				}
+			}
+			else {
+				if (deck[x]->getColor() != getTopColour()) {
+					if (id == deck[x]->getId())
+						return false;
+				}
+			}
+		}
+	}
+	return true;
+}
+
 void GameView::drawStart(){
 	drawBackground();
 
-	Picture* imageToDraw = nullptr;
-
-	for (int i = 0; i < numberOfPlayers; i++) {
+	for (int i = 0; i < numberOfPlayers; i++) { //Gracze
 		std::vector <Card*> deck = player->at(i).getDeck();
-		for (unsigned int j = 0; j < deck.size(); j++) {
+		int max = 0;
+
+		for (unsigned int j = 0; j < deck.size(); j++) { //Deck
 			int temp = deck[j]->getId();
-			if (i == 0)
-				imageToDraw = &cards[temp];
-			else
-				imageToDraw = &back;
-			//cards[temp].setPosition(positions[i].gap(j, deck.size(), cards->getSize(), positions[i].hand));
-			imageToDraw->setPosition(positions[i].gap(j, deck.size(), cards->getSize(), positions[i].hand));
-			//draw(cards[temp]);
-			draw(*imageToDraw);
-			if ((commands.size() == 0 || j != 0) && i == 0)
-				addCommand(cards[temp].getSize(), "ThrowCard", j);
+			
+			if (i == 0) {
+				sf::Vector2f cardPos = positions[i].gap(j, deck.size(), cards->getSize(), positions[i].hand);
+				if (j == *selection && commands[0].command == "ThrowCard") //Pozycja jeœli jest selection na karcie
+					cardPos.y -= (cards->getSize().height / 2);
+				cards[temp].setPosition(cardPos);
+
+				bool ameno = allowedCard(temp);
+				if (!ameno) {
+					cards[temp].setOpacityColour(sf::Color::Red);
+					cards[temp].setOpacityLevel(100);
+				}
+				else max++;
+
+				if ((commands.size() == 0 || j != 0) && i == 0 && commands.size() < max && ameno)
+					addCommand(cards[temp].getSize(), "ThrowCard", j);
+				draw(cards[temp]);
+				cards[temp].setOpacityLevel(0);
+			}
+			else {
+				back.setPosition(positions[i].gap(j, deck.size(), cards->getSize(), positions[i].hand));
+				draw(back);
+			}
 		}
 	}
+	
 	drawTriumph();
 }
 
@@ -239,17 +302,7 @@ void GameView::drawResult()
 
 int GameView::getBestCard() {
 	int max = -1, maxValue = 0, triumphColor = (*triumph)->getColor();
-	static int topColor;
-	for (int i = 0, counter = 0; i < int(table->size()); i++) {
-		if (table->at(i) == NULL)
-			counter++;
-		if (counter == int(table->size() - 1)) {
-			for (int j = 0; j < int(table->size()); j++) {
-				if (table->at(j) != NULL)
-					topColor = table->at(j)->getColor();
-			}
-		}
-	}
+	static int topColor = getTopColour();
 
 	for (int i = 0; i < int(table->size()); i++) {
 		Card* temp = table->at(i);
@@ -278,7 +331,8 @@ void GameView::drawTable(){
 				cards[temp->getId()].setOpacityLevel(100);
 			}
 			cards[temp->getId()].setPosition(positions[i].table);
-			draw(cards[temp->getId() ]);
+			draw(cards[temp->getId()]);
+
 			cards[temp->getId()].setOpacityColour(sf::Color::White);
 			cards[temp->getId()].setOpacityLevel(0);
 		}
@@ -312,6 +366,9 @@ void GameView::drawDeclaration() {
 
 	for (int i = 0; i < numberOfCards + 1; i++) {
 		if (sum + i != numberOfCards || sum == 0 || numberOfCards < 3) {
+			if (i == *selection) declaration.setBackgroundColor(sf::Color(51, 51, 255));
+			else declaration.setBackgroundColor(sf::Color::Blue);
+
 			declaration.setText(sf::String(std::to_string(i)));
 			declaration.setPosition( float(settings->window->getSize().x / 2 + declaration.getGlobalBounds().width * (i -( (numberOfCards + 1)/2) ) ), float(settings->window->getSize().y * 3 / 4) );
 			draw(declaration);
@@ -343,6 +400,14 @@ sf::String GameView::checkCoords(sf::Vector2u& codes){
 			return commands[i].command;
 		}
 			
+	}
+	return "";
+}
+
+sf::String GameView::checkCode(int code){
+	for (int i = commands.size() - 1; i >= 0; i--) {
+		if (commands[i].code == code)
+			return commands[i].command;
 	}
 	return "";
 }

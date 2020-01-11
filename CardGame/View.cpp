@@ -23,6 +23,10 @@ void View::addCommand(sf::FloatRect hitbox, sf::String command, int code){
 	commands[commands.size() - 1].code = code;
 }
 
+int View::getCommandsSize(){
+	return commands.size();
+}
+
 void View::clearCommands(){
 	commands.clear();
 }

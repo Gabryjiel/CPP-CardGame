@@ -16,6 +16,7 @@ class GameView : public View{
 	Picture* cards;
 	Picture back;
 	std::vector<Position> positions;
+	int* selection;
 
 	std::vector<Player>* player;
 	std::vector <Card*>* table;
@@ -24,12 +25,13 @@ class GameView : public View{
 
 	int getBestCard();
 public:
-	GameView(GameSettings& settings, std::vector<Player>* player, std::vector<Card*>* table, Card** triumph);
+	GameView(GameSettings& settings, std::vector<Player>* player, std::vector<Card*>* table, Card** triumph, int* code);
 	~GameView();
 	
 	void drawScene(const sf::String mode);
 	bool checkEvent(sf::Event& event);
 	sf::String checkCoords(sf::Vector2u& codes);
+	sf::String checkCode(int code);
 	void start();
 	
 	void drawStart();
@@ -38,6 +40,8 @@ public:
 	void drawTable();
 	void displayWinner(int roundWinner);
 	void drawBackground();
+	int getTopColour();
+	bool allowedCard(int id);
 	void drawDeclaration();
 
 	int selectCard(int player);

@@ -65,6 +65,10 @@ void Picture::setOpacityLevel(int opacityLevel){
 	opacity.setFillColor(colour);
 }
 
-void Picture::setOpacityColour(sf::Color color){
+void Picture::setOpacityColour(sf::Color color) {
 	opacity.setFillColor(color);
+}
+
+int Picture::getOpacityLevel(){
+	return opacity.getFillColor().a;
 }
