@@ -31,14 +31,7 @@ class Game : public Deck{
 	void singleRound();
 
 public:
-	Game(int nOP) {
-		numberOfPlayers = nOP;
-		player.resize(numberOfPlayers);
-		this->deck.resize(numberOfPlayers);
-		ai = new AI;
-		roundWinner = 0;
-		console2 = new ConsoleView(&player, &deck, triumph, nOP);
-	};
+	Game(int nOP = 4);
 	~Game();
 	
 	void start();

@@ -1,6 +1,15 @@
 #include "Game.h"
 #include <windows.h>
 
+Game::Game(int nOP) {
+	numberOfPlayers = nOP;
+	player.resize(numberOfPlayers);
+	this->deck.resize(numberOfPlayers);
+	ai = new AI(&player, &triumph, &deck);
+	roundWinner = 0;
+	console2 = new ConsoleView(&player, &deck, triumph, nOP);
+}
+
 Game::~Game(){
 	player.clear();
 	delete ai;
@@ -16,7 +25,7 @@ void Game::start() {
 }
 
 void Game::prepareRound(int numberOfCards, bool newGame) {
-	//this->shuffle();
+	
 	numberOfPlayers = player.size();
 	if (player[0].getDeckSize() == 0) {
 		if (newGame) {
@@ -24,6 +33,7 @@ void Game::prepareRound(int numberOfCards, bool newGame) {
 			player.resize(numberOfPlayers);
 		}
 		setDefaultDeck();
+		shuffle();
 		for (int i = 0; i < numberOfCards * numberOfPlayers; i++) {
 			if (i > 52) throw std::runtime_error("Not enough cards in the deck.");
 			player[i % numberOfPlayers].addCard(throwCard(0));
@@ -41,7 +51,7 @@ void Game::prepareRound(int numberOfCards, bool newGame) {
 	for (int i = 0; i < player.size(); i++) {
 		int aiLevel = player[i].getAI();
 		if (!aiLevel)
-			ai->declare(aiLevel);
+			ai->declare(i, aiLevel);
 	}
 	
 }

@@ -217,8 +217,10 @@ void GameView::drawBackground() {
 	settings->window->clear(sf::Color(settings->backgroundColour));
 }
 
-int GameView::getTopColour() {
-	int topColour = -1;
+int GameView::getTopColour(bool reset) {
+	static int topColour;
+	if (reset || topColour == 0)
+		topColour = -1;
 	for (int i = 0; i < int(table->size()); i++) {
 		if (table->at(i) == NULL) {
 
@@ -232,7 +234,7 @@ int GameView::getTopColour() {
 }
 
 bool GameView::allowedCard(int id) {
-	if (getTopColour() != -1) {
+	if (getTopColour(1) != -1) {
 
 		std::vector <Card*> deck = player->at(0).getDeck();
 		
@@ -316,6 +318,8 @@ void GameView::drawStart(){
 			else {
 				back.setPosition(cardPos);
 				draw(back);
+				//cards[temp].setPosition(cardPos);
+				//draw(cards[temp]);
 			}
 		}
 		sf::Vector2f infoPos = positions[i].gap(0, deck.size(), cards->getSize(), positions[i].hand);
@@ -350,16 +354,22 @@ void GameView::drawResult()
 }
 
 int GameView::getBestCard() {
-	int max = -1, maxValue = 0, triumphColor = (*triumph)->getColor();
-	int topColor = getTopColour();
+	int max = -1, maxValue = 0, triumphColour = (*triumph)->getColor();
+	int notNull = 0, topColour = -1;
+	
+	for (int i = 0; i < table->size(); i++)
+		if (table->at(i) != NULL) notNull++;
+	if (notNull == 0) topColour == -1;
+	else if (notNull == 1) topColour = getTopColour(1);
+	else topColour = getTopColour();
 
 	for (int i = 0; i < int(table->size()); i++) {
 		Card* temp = table->at(i);
 		if (temp != NULL) {
 			int tempId = table->at(i)->getId();
-			if (table->at(i)->getColor() == topColor)
+			if (table->at(i)->getColor() == topColour)
 				tempId += 100;
-			if (table->at(i)->getColor() == triumphColor)
+			if (table->at(i)->getColor() == triumphColour)
 				tempId += 200;
 			if (tempId > maxValue) {
 				max = i;
@@ -372,6 +382,7 @@ int GameView::getBestCard() {
 
 void GameView::drawTable(){
 	int max = getBestCard();
+	
 	for (int i = 0; i < int(settings->players.size()); i++) {
 		Card* temp = table->at(i);
 		if (!temp == NULL) {

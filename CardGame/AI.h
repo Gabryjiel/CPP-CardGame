@@ -1,11 +1,16 @@
 #pragma once
-#include "Deck.h"
+#include "Player.h"
 
 class AI {
-private:
+	Card** triumph;
+	std::vector<Player>* player;
+	std::vector<Card*>* table;
 
 public:
-	int declare(int aiLevel);
+	AI(std::vector<Player>* players, Card** triumph, std::vector<Card*>* deck);
+	~AI();
+
+	int declare(int playerNr, int aiLevel);
 	int selectCard(int player, int difficulty);
 
 };

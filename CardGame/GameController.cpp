@@ -57,7 +57,7 @@ int GameController::start() {
 					game->setDeclaration(i, codes.x);
 				}
 				else
-					game->setDeclaration(i, game->ai->declare(1));
+					game->setDeclaration(i, game->ai->declare(1, i));
 
 				if (i == gameData.playersSettings->size() - 1)
 					i = 0;

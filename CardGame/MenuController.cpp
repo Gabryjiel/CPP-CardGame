@@ -18,8 +18,8 @@ int MenuController::start() {
 		interpretEvent();
 
 		if (command == "QuickGame") {
-			settings->players = { 0, 1111, 2222, 3333 };
-			settings->rounds = { 4, 11, 10 ,9, 8,7,6,5,4,3,2,1,1,1,1 };
+			settings->players = { 0, 1111, 7777, 5555 };
+			settings->rounds = {/* 12, 11, 10 ,9, 8,7,6,5,*/4,3,2,1,/*1,1,1*/ };
 			settings->newGame = true;
 			return STARTGAME;
 		}
@@ -142,11 +142,12 @@ void MenuController::interpretEvent() {
 		else if (codes.x == 36) {
 			if (view->getCommandsSize() > 5)
 				command = "Options";
-			else if(int(view->getCommandsSize()) == 3 || int(view->getCommandsSize()) == 2)
+			else if (int(view->getCommandsSize()) == 3 || int(view->getCommandsSize()) == 2)
 				command = "MainMenu";
 			else
 				command = "CLOSE";
 		}
+		else command = "";
 	}
 	else command = "";
 }
