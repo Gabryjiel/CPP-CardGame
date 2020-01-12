@@ -19,7 +19,7 @@ int MenuController::start() {
 
 		if (command == "QuickGame") {
 			settings->players = { 0, 1111, 7777, 5555 };
-			settings->rounds = {/* 12, 11, 10 ,9, 8,7,6,5,*/4,3,2,1,/*1,1,1*/ };
+			settings->rounds = {/* 12, 11, 10 ,9, 8,7,6,5,*/4,/*3,2,1,1,1,1*/ };
 			settings->newGame = true;
 			return STARTGAME;
 		}

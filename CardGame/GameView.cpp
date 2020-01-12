@@ -382,19 +382,40 @@ int GameView::getBestCard() {
 
 void GameView::drawTable(){
 	int max = getBestCard();
-	
+	static int firstCard;
+
+	for (int i = 0, notNull = 0, index = -1; i < int(table->size()); i++) {
+		if (table->at(i) != NULL) {
+			notNull++;
+			index = i;
+		}
+		if (i == int(table->size()) - 1 && notNull == 1) {
+			if (notNull == 1)
+				firstCard = index;
+			else if (notNull == 0)
+				firstCard = -1;
+		}
+	}
+
+
 	for (int i = 0; i < int(settings->players.size()); i++) {
 		Card* temp = table->at(i);
 		if (!temp == NULL) {
-			if (i == max) {
-				cards[temp->getId()].setOpacityColour(sf::Color::Yellow);
-				cards[temp->getId()].setOpacityLevel(100);
+			int tempID = temp->getId();
+			if (i == firstCard) {
+				cards[tempID].setOpacityColour(sf::Color::Blue);
+				cards[tempID].setOpacityLevel(120);
 			}
-			cards[temp->getId()].setPosition(positions[i].table);
-			draw(cards[temp->getId()]);
+			else if (i == max) {
+				cards[tempID].setOpacityColour(sf::Color::Yellow);
+				cards[tempID].setOpacityLevel(120);
+			}
+			
+			cards[tempID].setPosition(positions[i].table);
+			draw(cards[tempID]);
 
-			cards[temp->getId()].setOpacityColour(sf::Color::White);
-			cards[temp->getId()].setOpacityLevel(0);
+			cards[tempID].setOpacityColour(sf::Color::White);
+			cards[tempID].setOpacityLevel(0);
 		}
 	}
 	
@@ -508,7 +529,7 @@ void GameView::drawScoreboard() {
 					text.setText(std::to_string(points));
 					text.setPosition(background.getPosition().x + (i + 1) * text.getGlobalBounds().width, background.getPosition().y + (j + 1) * text.getGlobalBounds().height);
 					draw(text);
-					text.setText("###");
+					text.setText("/");
 				}
 			}
 			else if (points == 1000 || points == -1000)
@@ -517,7 +538,7 @@ void GameView::drawScoreboard() {
 				text.setText(std::to_string(player->at(i).getPoints(j) * (-1)));
 				text.setPosition(background.getPosition().x + (i + 1) * text.getGlobalBounds().width, background.getPosition().y + (j + 1) * text.getGlobalBounds().height);
 				draw(text);
-				text.setText("###");
+				text.setText("\\");
 			}
 			else text.setText(std::to_string(player->at(i).getPoints(j)));
 

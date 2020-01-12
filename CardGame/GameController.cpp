@@ -69,12 +69,14 @@ int GameController::start() {
 			for (gameData.playerToMove, gameData.cardsOnTable; gameData.cardsOnTable < int(settings->players.size()); gameData.cardsOnTable++) { //Rzucanie kart¹ przez wszytkich graczy
 				if (gameData.playerToMove == -1) 
 					gameData.playerToMove = gameData.roundsPlayed;
+				
+				view->drawScene("Start");
+				view->drawScene("Table");
+				view->display();
+
 				int card_id = -1;
 				if (settings->players[gameData.playerToMove] == 0) {
 					view->clearCommands();
-					view->drawScene("Start");
-					view->drawScene("Table");
-					view->display();
 					if (waitForEvent("ThrowCard")) return MAINMENU;
 					card_id = codes.x;
 				}
@@ -89,8 +91,8 @@ int GameController::start() {
 
 			view->drawScene("Start");
 			view->drawScene("Table");
-			view->addCommand(sf::FloatRect(0, 0, settings->window->getSize().x, settings->window->getSize().y), "Proceed", selection);
 			view->display();
+			view->addCommand(sf::FloatRect(0, 0, settings->window->getSize().x, settings->window->getSize().y), "Proceed", selection);
 			if (waitForEvent("Proceed")) return MAINMENU;
 			game->sumUpTable();		
 			gameData.cardsOnTable = 0;
@@ -100,8 +102,13 @@ int GameController::start() {
 		gameData.playerToMove = -1;
 		view->drawScene("Background");
 		view->display();
+		view->drawScene("Start");
 		game->sumUpRound();
 	}
+	view->drawScene("Scoreboard");
+	view->display();
+	view->addCommand(sf::FloatRect(0, 0, settings->window->getSize().x, settings->window->getSize().y), "Proceed", selection);
+	if (waitForEvent("Proceed")) return MAINMENU;
 	game->roundWinner = 0;
 	gameData.reset();
 	return MAINMENU;
@@ -159,7 +166,7 @@ void GameController::checkEvent() {
 	else {
 		switch (action.type) {
 
-		case sf::Event::MouseButtonPressed:
+		case sf::Event::MouseButtonReleased:
 			if (action.mouseButton.button == sf::Mouse::Left)
 				command = "MouseLeft";
 			else if (action.mouseButton.button == sf::Mouse::Right)
@@ -188,6 +195,7 @@ void GameController::checkEvent() {
 			command = "CLOSE";
 			break;
 		default:
+			command = "";
 			break;
 		}
 	}
@@ -226,7 +234,7 @@ void GameController::interpretEvent() {
 		}
 	}
 	else if (command == "KeyPressed") {
-		if (codes.x == 60) {
+		if (codes.x == 60 && gameData.roundsPlayed < settings->rounds.size()) {
 			view->drawScene("Start");
 			view->drawScene("Scoreboard");
 			view->display();
@@ -242,6 +250,9 @@ void GameController::interpretEvent() {
 					break;
 				}
 			}
+			view->drawScene("Start");
+			view->drawScene("Table");
+			view->display();
 		}
 	}
 	else if (command == "CLOSE") {

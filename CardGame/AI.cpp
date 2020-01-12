@@ -17,10 +17,11 @@ int AI::declare(int playerNr, int aiLevel) {
 	int cardsInColor = 0;
 
 	std::vector<Card*> deck = player->at(aiLevel % 1000).getDeck();
-	for (int color = 0, cardsInColor = 0; color < 4; color++) {
+	for (int color = 0; color < 4; color++) {
 		float temp = 0;
+		int cardsInColor = 0;
 		for (int i = 0; i < int(deck.size()); i++) {
-			temp += float(deck[i]->getFigure()) / 13;
+			temp = float(deck[i]->getFigure()) / 13;
 			if (deck[i]->getColor() == color)
 				cardsInColor++;
 		}
@@ -28,7 +29,8 @@ int AI::declare(int playerNr, int aiLevel) {
 			declaration += temp;
 		}
 		else {
-			declaration += (temp / cardsInColor);
+			if(cardsInColor > 0)
+				declaration += (temp / cardsInColor);
 		}
 	}
 	if ((10 - (aiLevel % 100)) <= int(declaration * 10) % 10)
@@ -75,16 +77,16 @@ int AI::selectCard(int playerNr, int difficulty) {
 	}
 
 	
-	int cardToThrow = 0, index = 0, value = -1;
+	int cardToThrow = 0, index = 0, value;
 
 	if (player->at(playerNr).getTaken() > player->at(playerNr).getDeclaration()) {
-		for (int i = 0; i < deck.size(); i++) {
+		for (int i = 0, value = -1; i < deck.size(); i++) {
 			if (cardValue[i] > value && allowed[i] == true)
 				index = i;
 		}
 	}
 	else{
-		for (int i = 0; i < deck.size(); i++) {
+		for (int i = 0, value = INT16_MAX; i < deck.size(); i++) {
 			if ((cardValue[i] < value || value == -1) && allowed[i] == true)
 				index = i;
 		}
