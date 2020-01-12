@@ -126,6 +126,8 @@ void Game::sumUpRound(){
 			player[i].pointsScore(true);
 		}
 		else player[i].pointsScore(false);
+
+		player[i].setTaken(0);
 	}
 }
 

@@ -176,7 +176,6 @@ void GameView::loadCards() {
 		cards[i].loadImage("images\\cards\\" + cardname + ".png");
 		cards[i].scale(0.15f, 0.15f);
 	}
-	back.loadImage(settings->cardTheme);
 	back.scale(0.15f, 0.15f);
 }
 
@@ -285,6 +284,8 @@ void GameView::drawStart(){
 	name.setFormating(1, 1);
 	name.setSize(30, 40);
 
+	back.loadImage(settings->cardTheme);
+
 	for (int i = 0; i < numberOfPlayers; i++) { //Gracze
 		std::vector <Card*> deck = player->at(i).getDeck();
 		int max = 0;
@@ -316,13 +317,15 @@ void GameView::drawStart(){
 				back.setPosition(cardPos);
 				draw(back);
 			}
-			if (j == deck.size() - 1 && i != 0) {
-				name.setText("G" + std::to_string(i));
-				name.setPosition(cardPos.x, cardPos.y);
-				draw(name);
-			}
-
 		}
+		sf::Vector2f infoPos = positions[i].gap(0, deck.size(), cards->getSize(), positions[i].hand);
+		if (i == 0) infoPos.x -= name.getGlobalBounds().width * 2;
+		name.setText("G" + std::to_string(i));
+		name.setPosition(infoPos.x, infoPos.y);
+		draw(name);
+		name.setText(std::to_string(player->at(i).getTaken()));
+		name.setPosition(infoPos.x, infoPos.y + name.getGlobalBounds().height + 2);
+		draw(name);
 	}
 	
 	drawTriumph();

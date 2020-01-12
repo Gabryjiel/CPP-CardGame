@@ -46,7 +46,8 @@ int GameController::start() {
 	for(gameData.roundsPlayed; gameData.roundsPlayed < int(settings->rounds.size()); gameData.roundsPlayed++){ //Partia
 		game->prepareRound(settings->rounds[gameData.roundsPlayed], settings->newGame);
 
-		for (int i = 0; i < int(settings->players.size()); i++) { // Deklaracje przez parti¹
+		for (int declared = 0, i = gameData.roundsPlayed; declared < int(settings->players.size()); declared++) { // Deklaracje przez parti¹
+			
 			if (game->player.at(i).getDeclaration() == -1000) {
 				if (i == 0) {
 					view->drawScene("Start");
@@ -57,13 +58,17 @@ int GameController::start() {
 				}
 				else
 					game->setDeclaration(i, game->ai->declare(1));
+
+				if (i == gameData.playersSettings->size() - 1)
+					i = 0;
+				else i++;
 			}
 		}
 
 		for(gameData.cardsPlayed; gameData.cardsPlayed < settings->rounds[gameData.roundsPlayed]; gameData.cardsPlayed++){ //Runda		
 			for (gameData.playerToMove, gameData.cardsOnTable; gameData.cardsOnTable < int(settings->players.size()); gameData.cardsOnTable++) { //Rzucanie kart¹ przez wszytkich graczy
 				if (gameData.playerToMove == -1) 
-					gameData.playerToMove = game->getRoundWinner();
+					gameData.playerToMove = gameData.roundsPlayed;
 				int card_id = -1;
 				if (settings->players[gameData.playerToMove] == 0) {
 					view->clearCommands();
@@ -92,6 +97,7 @@ int GameController::start() {
 			gameData.playerToMove = game->getRoundWinner();
 		}
 		gameData.cardsPlayed = 0;
+		gameData.playerToMove = -1;
 		view->drawScene("Background");
 		view->display();
 		game->sumUpRound();

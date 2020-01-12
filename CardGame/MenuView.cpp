@@ -11,50 +11,69 @@ bool MenuView::checkEvent(sf::Event &event){
 }
 
 void MenuView::drawScene(sf::String menu) {
-	int numberOfOptions;
 	std::vector<sf::String> textTable;
 	std::vector<sf::String> commandTable;
 	
+	settings->window->clear(settings->backgroundColour);
+
 	if (menu == "MainMenu") {
-		numberOfOptions = 5;
 		textTable = { "Szybka gra", L"W³asna gra", "Opcje", L"Wyjœcie", "Kontynuuj" };
 		commandTable = { "QuickGame", "CustomGame", "Options", "CLOSE", "Continue" };
 	}
-	else if (menu == "Options") {
-		numberOfOptions = 4;
-		textTable = { L"Menu g³ówne", L"Rozdzielczoœæ", L"Kolor t³a", "Motyw kart" };
-		commandTable = { "MainMenu", "Resolution", "BackgroundColour", "CardTheme" };
+	else if (menu == "Options") {	
+		textTable = { L"Rozdzielczoœæ", L"Kolor t³a", "Motyw kart" };
+		commandTable = { "ResolutionMenu", "BackgroundColourMenu", "CardThemeMenu" };
 	}
 	else if (menu == "CustomGame") {
-		numberOfOptions = 3;
-		textTable = { L"Menu g³ówne", L"Iloœæ rund", L"Iloœæ graczy" };
-		commandTable = { "MainMenu", "Round", "Players" };
+		textTable = { L"Iloœæ rund", L"Iloœæ graczy" };
+		commandTable = { "Round", "Players" };
+	}
+	else if (menu == "ResolutionMenu") {
+		textTable = { "640x480", "800x640", "1024x768", "1280x720" , "1600x900", "1920x1080", "Fullscreen"};
+		commandTable = { "ChangeResolution", "ChangeResolution", "ChangeResolution", "ChangeResolution", "ChangeResolution", "ChangeResolution", "ChangeResolution"};
+	}
+	else if (menu == "BackgroundColourMenu") {
+		textTable = { "Niebieski", "Szary", "Czerwony", L"¯ó³ty", "Fioletowy", "Zielony", L"Domyœlny" };
+		commandTable = { "ChangeBColour", "ChangeBColour" , "ChangeBColour" , "ChangeBColour" , "ChangeBColour" , "ChangeBColour", "ChangeBColour" };
+	}
+	else if (menu == "CardThemeMenu") {
+		textTable = { "Zielony", "Niebieski", "Czerwony", L"Pomarañczowy", "Fioletowy", "Czarny" };
+		commandTable = { "ChangeCardTheme", "ChangeCardTheme", "ChangeCardTheme", "ChangeCardTheme", "ChangeCardTheme", "ChangeCardTheme" };
+	
+		Picture card;
+		card.loadImage(settings->cardTheme);
+		card.setPosition(settings->window->getSize().x / 2, settings->window->getSize().y / 2);
+		card.scale(0.2f, 0.2f);
+		draw(card);
 	}
 
-	options.clear();
-	options.resize(numberOfOptions);
-	commands.clear();
+	if (textTable.size() > 0 && textTable.size() == commandTable.size()) {
+		Button text;
+		text.setBackgroundColor(settings->primaryColour);
+		text.setOutlineColor(settings->secondaryColour);
+		text.setOutlineThickness(2);
+		text.setSize(50, 200);
+		text.setFormating(1, 1);
 
-	settings->window->clear(sf::Color(44, 89, 56));
-	for (int i = 0; i < numberOfOptions; i++) {
-		commands.push_back(commandTable[i]);
-		options[i].setText(textTable[i]);
-		options[i].setSize(50, 200);
-		options[i].setOutlineThickness(4);
-		options[i].setOutlineColor(sf::Color(0, 53, 138));
-		options[i].setBackgroundColor(sf::Color(0, 53, 138));
-		options[i].setFormating(1, 1);
-		options[i].setPosition(4, float(10 + i * 70));
-		options[i].setFormating(1, 1);
-		draw(options[i]);
+		clearCommands();
+
+		for (int i = 0; i < int(textTable.size()); i++) {
+			text.setText(textTable[i]);
+			text.setPosition(4, 10 + i * 70);
+			draw(text);
+			addCommand(text.getGlobalBounds(), commandTable[i], i);
+		}
 	}
 	display();
 }
 
+
 sf::String MenuView::checkCoords(sf::Vector2u& coords) {
-	for (int i = 0; i < int(options.size()); i++) {
-		if (options[i].isOn(float(coords.x), float(coords.y)))
-			return commands[i];
+	for (int i = 0; i < int(commands.size()); i++) {
+		if (commands[i].hitbox.contains(float(coords.x), float(coords.y))) {
+			coords.x = coords.y = commands[i].code;
+			return commands[i].command;
+		}
 	}
 	return "";
 }

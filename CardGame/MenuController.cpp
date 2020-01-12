@@ -12,8 +12,6 @@ MenuController::~MenuController() {
 int MenuController::start() {
 	view->drawScene("MainMenu");
 	while (true) {
-		command = "";
-		codes.x = codes.y = 0;
 		while (command == "")
 			checkEvent();
 
@@ -25,7 +23,8 @@ int MenuController::start() {
 			settings->newGame = true;
 			return STARTGAME;
 		}
-		else if (command == "CustomGame" || command == "Options" || command == "MainMenu") {
+		else if (command == "CustomGame" || command == "Options" || command == "MainMenu" || 
+			command == "ResolutionMenu" || command == "CardThemeMenu" || command == "BackgroundColourMenu") {
 			view->drawScene(command);
 		}
 		else if (command == "Continue" && !settings->rounds.empty()) {
@@ -35,14 +34,42 @@ int MenuController::start() {
 			view->close();
 			return CLOSEPROGRAM;
 		}
-		else if (command == "Resolution") {
-
+		else if (command == "ChangeResolution") {
+			settings->window->close();
+			switch (codes.x) {
+			case 0: settings->window->create(sf::VideoMode(640, 480), "Planowanie", sf::Style::Close); break;
+			case 1: settings->window->create(sf::VideoMode(800, 640), "Planowanie", sf::Style::Close); break;
+			case 2: settings->window->create(sf::VideoMode(1024, 768), "Planowanie", sf::Style::Close); break;
+			case 3: settings->window->create(sf::VideoMode(1280, 720), "Planowanie", sf::Style::Close); break;
+			case 4: settings->window->create(sf::VideoMode(1600, 900), "Planowanie", sf::Style::Close); break;
+			case 5: settings->window->create(sf::VideoMode(1920, 1080), "Planowanie", sf::Style::Close); break;
+			case 6: settings->window->create(sf::VideoMode::getFullscreenModes()[0], "Planowanie", sf::Style::Fullscreen); break;
+			default: settings->window->create(sf::VideoMode(1280, 720), "Planowanie", sf::Style::Close);
+			}
+			view->drawScene("ResolutionMenu");
 		}
-		else if (command == "BackgroudColour") {
-
+		else if (command == "ChangeBColour") {
+			switch (codes.x) {
+			case 0: settings->backgroundColour = sf::Color(0, 0, 102); break;
+			case 1: settings->backgroundColour = sf::Color(64, 64, 64); break;
+			case 2: settings->backgroundColour = sf::Color(102, 0, 0); break;
+			case 3: settings->backgroundColour = sf::Color(102, 102, 0); break;
+			case 4: settings->backgroundColour = sf::Color(51, 0, 51); break;
+			case 5: settings->backgroundColour = sf::Color(0, 102, 0); break;
+			default: settings->backgroundColour = sf::Color(44, 89, 56);
+			}
+			view->drawScene("BackgroundColourMenu");
 		}
-		else if (command == "CardTheme") {
-
+		else if (command == "ChangeCardTheme") {
+			switch (codes.x) {
+			case 0: settings->cardTheme = "images//cards//card_back_green.png"; break;
+			case 1: settings->cardTheme = "images//cards//card_back_blue.png"; break;
+			case 2: settings->cardTheme = "images//cards//card_back_red.png"; break;
+			case 3: settings->cardTheme = "images//cards//card_back_orange.png"; break;
+			case 4: settings->cardTheme = "images//cards//card_back_purple.png"; break;
+			default:settings->cardTheme = "images//cards//card_back_black.png"; break;
+			}
+			view->drawScene("CardThemeMenu");
 		}
 	}
 }
@@ -82,16 +109,18 @@ void MenuController::checkEvent() {
 void MenuController::interpretEvent() {
 	static int selection;
 
-	if (command == "MouseLeft")
+	if (command == "CLOSE")
+		return;
+	else if (command == "MouseLeft")
 		command = view->checkCoords(codes);
 	else if (command == "Key") {
-		if ((codes.x == 'w' || codes.x == 'W') && selection > 0) {
+		if ((codes.x == 2 || codes.x == 'W') && selection > 0) {
 			selection--;
 		}
 		else if ((codes.x == 's' || codes.x == 'S') && selection < 4) {
 			selection++;
 		}
-		else if (codes.x == 13) {
+		else if (codes.x == 58) {
 			switch (selection) {
 			case 0:
 				command = "QuickGame";
@@ -110,5 +139,14 @@ void MenuController::interpretEvent() {
 				break;
 			}
 		}
+		else if (codes.x == 36) {
+			if (view->getCommandsSize() > 5)
+				command = "Options";
+			else if(int(view->getCommandsSize()) == 3 || int(view->getCommandsSize()) == 2)
+				command = "MainMenu";
+			else
+				command = "CLOSE";
+		}
 	}
+	else command = "";
 }
