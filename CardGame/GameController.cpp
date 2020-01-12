@@ -36,11 +36,13 @@ bool GameController::prepareGame() {
 	else if (settings->load == true) {
 		std::ifstream file(settings->loadPath.toAnsiString(), std::ios_base::binary);
 		file >> gameData;
+		file.close();
 		settings->load = false;
 	}
 	else if (settings->save == true) {
 		std::ofstream file(settings->loadPath.toAnsiString(), std::ios_base::binary);
 		file << gameData;
+		file.close();
 		settings->save = false;
 		return false;
 	}

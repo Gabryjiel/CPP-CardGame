@@ -45,7 +45,7 @@ void Game::prepareRound(int numberOfCards, bool newGame) {
 		for (int i = 0; i < numberOfPlayers; i++)
 			player[i].sortDeck();
 	}
-	console2->displayStart();
+	//console2->displayStart();
 	
 
 	for (int i = 0; i < player.size(); i++) {

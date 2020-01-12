@@ -147,10 +147,34 @@ void GameView::setPositions() {
 void GameView::start() {
 	numberOfPlayers = settings->players.size();
 	positions.resize(numberOfPlayers);
+	scaleAllCards();
 	setPositions();
 }
 
+void GameView::scaleAllCards() {
+	static float xScale, yScale;
+	if (xScale != 0) {
+		float unScaleX = 1/xScale, unScaleY =1/yScale;
+		for (int i = 0; i < 52; i++) {
+			cards[i].scale(unScaleX, unScaleY);
+		}
+		back.scale(unScaleX, unScaleY);
+	}
+	if (float(settings->window->getSize().x) / float(settings->window->getSize().y) == 16 / 9.0f) {
+		xScale = settings->window->getSize().x / ((1280 / (cards->getSize().width * 0.15f) * cards->getSize().width));
+		yScale = settings->window->getSize().y / ((720 / (cards->getSize().height * 0.15f) * cards->getSize().height));
+	}
+	else {
+		xScale = settings->window->getSize().x / ((1280 / (cards->getSize().width * 0.2f) * cards->getSize().width));
+		yScale = settings->window->getSize().y / ((720 / (cards->getSize().height * 0.15f) * cards->getSize().height));
+	}
+	for(int i = 0; i < 52; i++)
+		cards[i].scale(xScale, yScale);
+	back.scale(xScale, yScale);
+}
+
 void GameView::loadCards() {
+	//1280x720
 	for (int i = 0; i < 52; i++) {
 		sf::String cardname;
 
@@ -172,11 +196,9 @@ void GameView::loadCards() {
 		else if (i / 13 == 1) cardname += "clubs";
 		else if (i / 13 == 2) cardname += "diamonds";
 		else if (i / 13 == 3) cardname += "hearts";
-
+		
 		cards[i].loadImage("images\\cards\\" + cardname + ".png");
-		cards[i].scale(0.15f, 0.15f);
 	}
-	back.scale(0.15f, 0.15f);
 }
 
 void GameView::drawScene(const sf::String mode) {

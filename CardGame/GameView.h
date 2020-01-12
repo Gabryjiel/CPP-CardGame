@@ -52,6 +52,7 @@ public:
 	int selectCard(int player);
 	int declare(int round);
 	void loadCards();
+	void scaleAllCards();
 	void setPositions();
 	
 };

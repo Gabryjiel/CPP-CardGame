@@ -62,7 +62,7 @@ std::istream& operator>>(std::istream& input, SaveData& save){
 			}
 			else {
 				if (save.players->size() <= i)
-					save.players->push_back(Player());
+					save.players->resize(save.players->size() + 1);
 				save.players->at(i).addCard(temp);
 			}
 		}

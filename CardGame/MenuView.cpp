@@ -84,7 +84,7 @@ void MenuView::drawRoundsMenu() {
 	text.setOutlineThickness(1);
 	text.setTextSize(13);
 	text.setFormating(1, 1);
-	text.setSize(30, 60);
+	text.setSize(settings->window->getSize().y / 22, 80);
 
 	for (int i = 0; i < settings->rounds.size(); i++) {
 		text.setBackgroundColor(sf::Color(255, 255, 255, 0));
@@ -136,7 +136,7 @@ void MenuView::drawPlayersMenu(){
 
 	for (int i = 0; i < settings->players.size(); i++) {
 		text.setBackgroundColor(sf::Color(255, 255, 255, 0));
-		text.setText("Gracz " + std::to_string(i + 1));
+		text.setText("Gracz " + std::to_string(i));
 		text.setPosition(300, 10 + i * text.getGlobalBounds().height);
 		draw(text);
 
