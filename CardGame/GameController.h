@@ -22,7 +22,7 @@ class GameController : public Controller{
 	int makeDeclaration();
 	int makeAMove(int player);
 	void events();
-	void prepareGame();
+	bool prepareGame();
 	void gameStart();
 	bool checkCommand(const sf::String command);
 	bool waitForEvent(sf::String);

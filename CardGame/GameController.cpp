@@ -22,31 +22,39 @@ GameController::GameController(GameSettings& settings):Controller(settings){
 
 GameController::~GameController() {
 	delete game;
-	delete view;
 }
 
-void GameController::prepareGame() {
-	if (game->player.size() == 0) {	//Przystosowanie gry jeœli jest to NowaGra
+bool GameController::prepareGame() {
+	if (settings->newGame == true) {//Przystosowanie gry jeœli jest to NowaGra
 		game->player.clear();
 		game->player.resize(gameData.playersSettings->size());
-	}
-	
-	if (settings->newGame == true) {
 		gameData.reset();
 		game->player.clear();
 		game->player.resize(gameData.playersSettings->size());
 		settings->newGame = false;
 	}
+	else if (settings->load == true) {
+		std::ifstream file(settings->loadPath.toAnsiString(), std::ios_base::binary);
+		file >> gameData;
+		settings->load = false;
+	}
+	else if (settings->save == true) {
+		std::ofstream file(settings->loadPath.toAnsiString(), std::ios_base::binary);
+		file << gameData;
+		settings->save = false;
+		return false;
+	}
+	return true;
 }
 
 int GameController::start() {
 	view->start();
-	prepareGame();
+	if (!prepareGame()) return MAINMENU;
 
-	for(gameData.roundsPlayed; gameData.roundsPlayed < int(settings->rounds.size()); gameData.roundsPlayed++){ //Partia
-		game->prepareRound(settings->rounds[gameData.roundsPlayed], settings->newGame);
+	for(gameData.roundsPlayed; gameData.roundsPlayed < int(gameData.rounds->size()); gameData.roundsPlayed++){ //Partia
+		game->prepareRound(gameData.rounds->at(gameData.roundsPlayed), settings->newGame);
 
-		for (int declared = 0, i = gameData.roundsPlayed; declared < int(settings->players.size()); declared++) { // Deklaracje przez parti¹
+		for (int declared = 0, i = gameData.roundsPlayed; declared < int(gameData.players->size()); declared++) { // Deklaracje przez parti¹
 			
 			if (game->player.at(i).getDeclaration() == -1000) {
 				if (i == 0) {
@@ -58,15 +66,14 @@ int GameController::start() {
 				}
 				else
 					game->setDeclaration(i, game->ai->declare(1, i));
-
-				if (i == gameData.playersSettings->size() - 1)
-					i = 0;
-				else i++;
 			}
+			if (i == gameData.playersSettings->size() - 1)
+				i = 0;
+			else i++;
 		}
 
-		for(gameData.cardsPlayed; gameData.cardsPlayed < settings->rounds[gameData.roundsPlayed]; gameData.cardsPlayed++){ //Runda		
-			for (gameData.playerToMove, gameData.cardsOnTable; gameData.cardsOnTable < int(settings->players.size()); gameData.cardsOnTable++) { //Rzucanie kart¹ przez wszytkich graczy
+		for(gameData.cardsPlayed; gameData.cardsPlayed < gameData.rounds->at(gameData.roundsPlayed); gameData.cardsPlayed++){ //Runda		
+			for (gameData.playerToMove, gameData.cardsOnTable; gameData.cardsOnTable < int(gameData.players->size()); gameData.cardsOnTable++) { //Rzucanie kart¹ przez wszytkich graczy
 				if (gameData.playerToMove == -1) 
 					gameData.playerToMove = gameData.roundsPlayed;
 				
@@ -75,16 +82,16 @@ int GameController::start() {
 				view->display();
 
 				int card_id = -1;
-				if (settings->players[gameData.playerToMove] == 0) {
+				if (gameData.playersSettings->at(gameData.playerToMove) == 0) {
 					view->clearCommands();
 					if (waitForEvent("ThrowCard")) return MAINMENU;
 					card_id = codes.x;
 				}
-				else card_id = game->aiCardSelection(gameData.playerToMove, settings->players[gameData.playerToMove]);
+				else card_id = game->aiCardSelection(gameData.playerToMove, gameData.playersSettings->at(gameData.playerToMove));
 				
 				game->makeAMove(gameData.playerToMove, card_id);
 
-				if (gameData.playerToMove == settings->players.size() - 1) 
+				if (gameData.playerToMove == gameData.playersSettings->size() - 1) 
 					gameData.playerToMove = 0;
 				else gameData.playerToMove++;
 			}

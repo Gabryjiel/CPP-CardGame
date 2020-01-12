@@ -7,5 +7,6 @@ Controller::Controller(GameSettings& settings) {
 
 Controller::~Controller() {
 	this->settings = nullptr;
-	delete this->view;
+	if(view != nullptr)
+		delete view;
 }

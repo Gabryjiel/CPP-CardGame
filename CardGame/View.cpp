@@ -6,6 +6,7 @@ View::View(GameSettings& settings) {
 
 View::~View() {
 	settings = nullptr;
+	
 }
 
 void View::close() {

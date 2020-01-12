@@ -3,11 +3,13 @@
 #include "GameController.h"
 
 class Launcher{
-	GameSettings * settings = new GameSettings();
-	MenuController* menu_controller = new MenuController(*settings);
-	GameController* game_controller = new GameController(*settings);
+	GameSettings* settings;
+	Controller* controller;
 	
 public:
+	Launcher();
+	~Launcher();
+
 	void startGame();
 };
 

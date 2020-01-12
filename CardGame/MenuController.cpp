@@ -6,11 +6,11 @@ MenuController::MenuController(GameSettings& settings):Controller(settings) {
 }
 
 MenuController::~MenuController() {
-	delete view;
 }
 
 int MenuController::start() {
 	view->drawScene("MainMenu");
+	view->display();
 	while (true) {
 		while (command == "")
 			checkEvent();
@@ -19,13 +19,14 @@ int MenuController::start() {
 
 		if (command == "QuickGame") {
 			settings->players = { 0, 1111, 7777, 5555 };
-			settings->rounds = {/* 12, 11, 10 ,9, 8,7,6,5,*/4,/*3,2,1,1,1,1*/ };
-			settings->newGame = true;
-			return STARTGAME;
+			settings->rounds = {12, 11, 10 ,9, 8,7,6,5,4,3,2,1,1,1,1 };
+			command = "StartNew";
 		}
 		else if (command == "CustomGame" || command == "Options" || command == "MainMenu" || 
-			command == "ResolutionMenu" || command == "CardThemeMenu" || command == "BackgroundColourMenu") {
+			command == "ResolutionMenu" || command == "CardThemeMenu" || command == "BackgroundColourMenu" ||
+			command == "RoundsMenu" || command == "PlayersMenu") {
 			view->drawScene(command);
+			view->display();
 		}
 		else if (command == "Continue" && !settings->rounds.empty()) {
 			return STARTGAME;
@@ -33,6 +34,14 @@ int MenuController::start() {
 		else if (command == "CLOSE") {
 			view->close();
 			return CLOSEPROGRAM;
+		}
+		else if (command == "SaveGame") {
+			settings->save = true;
+			return STARTGAME;
+		}
+		else if (command == "LoadGame") {
+			settings->load = true;
+			return STARTGAME;
 		}
 		else if (command == "ChangeResolution") {
 			settings->window->close();
@@ -47,6 +56,7 @@ int MenuController::start() {
 			default: settings->window->create(sf::VideoMode(1280, 720), "Planowanie", sf::Style::Close);
 			}
 			view->drawScene("ResolutionMenu");
+			view->display();
 		}
 		else if (command == "ChangeBColour") {
 			switch (codes.x) {
@@ -59,6 +69,7 @@ int MenuController::start() {
 			default: settings->backgroundColour = sf::Color(44, 89, 56);
 			}
 			view->drawScene("BackgroundColourMenu");
+			view->display();
 		}
 		else if (command == "ChangeCardTheme") {
 			switch (codes.x) {
@@ -70,6 +81,12 @@ int MenuController::start() {
 			default:settings->cardTheme = "images//cards//card_back_black.png"; break;
 			}
 			view->drawScene("CardThemeMenu");
+			view->display();
+		}
+
+		if (command == "StartNew") {
+			settings->newGame = true;
+			return STARTGAME;
 		}
 	}
 }
@@ -83,7 +100,7 @@ void MenuController::checkEvent() {
 	else {
 		switch (action.type) {
 
-		case sf::Event::MouseButtonPressed:
+		case sf::Event::MouseButtonReleased:
 			if (action.mouseButton.button == sf::Mouse::Left)
 				command = "MouseLeft";
 			else if (action.mouseButton.button == sf::Mouse::Right)
@@ -92,7 +109,7 @@ void MenuController::checkEvent() {
 			codes.y = action.mouseButton.y;
 			break;
 
-		case sf::Event::KeyPressed:
+		case sf::Event::KeyReleased:
 			command = "Key";
 			codes.x = codes.y = action.key.code;
 			break;
@@ -140,7 +157,9 @@ void MenuController::interpretEvent() {
 			}
 		}
 		else if (codes.x == 36) {
-			if (view->getCommandsSize() > 5)
+			if (view->getCommandsSize() > 10)
+				command = "MainMenu";
+			else if (view->getCommandsSize() > 5)
 				command = "Options";
 			else if (int(view->getCommandsSize()) == 3 || int(view->getCommandsSize()) == 2)
 				command = "MainMenu";
@@ -148,6 +167,62 @@ void MenuController::interpretEvent() {
 				command = "CLOSE";
 		}
 		else command = "";
+	}
+	else if (command == "+r") {
+		if ((settings->rounds[codes.x] + 1) * settings->players.size() < 51) {
+			settings->rounds[codes.x] += 1;
+		}
+		command = "RoundsMenu";
+	}
+	else if (command == "-r") {
+		if (settings->rounds[codes.x] > 1) {
+			settings->rounds[codes.x] -= 1;
+		}
+		command = "RoundsMenu";
+	}
+	else if (command == "+R") {
+		if (settings->rounds.size() < 20) {
+			settings->rounds.push_back(1);
+		}
+		command = "RoundsMenu";
+	}
+	else if (command == "-R") {
+		if (settings->rounds.size() > 1) {
+			settings->rounds.pop_back();
+		}
+		command = "RoundsMenu";
+	}
+	
+	else if (command == "+g") {
+		if (settings->players[codes.x] < 10) {
+			settings->players[codes.x] += 1;
+		}
+		command = "PlayersMenu";
+	}
+	else if (command == "-g") {
+		if (settings->players[codes.x] > 1) {
+			settings->players[codes.x] -= 1;
+		}
+		command = "PlayersMenu";
+	}
+	else if (command == "+G") {
+		if (settings->players.size() < 10) {
+			settings->players.push_back(1);
+			for (int i = 0; i < settings->rounds.size(); i++) {
+				if (settings->rounds[i] * settings->players.size() > 51) {
+					settings->rounds[i] -= 1;
+					i--;
+					continue;
+				}
+			}
+		}
+		command = "PlayersMenu";
+	}
+	else if (command == "-G") {
+		if (settings->players.size() > 2) {
+			settings->players.pop_back();
+		}
+		command = "PlayersMenu";
 	}
 	else command = "";
 }

@@ -13,8 +13,10 @@ public:
 	~MenuView();
 
 	void drawScene(const sf::String menu);
+	void drawRoundsMenu();
 	void drawOptions();
 	bool checkEvent(sf::Event& event);
+	void drawPlayersMenu();
 	sf::String checkCoords(sf::Vector2u &coords);
 	sf::String checkCode(int code);
 
