@@ -24,6 +24,56 @@ GameController::~GameController() {
 	delete game;
 }
 
+std::string saveAs(HWND owner){
+	OPENFILENAME ofn;
+	char fileName[MAX_PATH] = "";
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = owner;
+	ofn.lpstrFilter = "Planowanie\0*.save\0";
+	ofn.lpstrFile = fileName;
+	ofn.nMaxFile = MAX_PATH;
+	ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_NOCHANGEDIR | MB_APPLMODAL | MB_TOPMOST;
+	ofn.lpstrDefExt = "";
+	ofn.lpstrInitialDir = "";
+
+	std::string fileNameStr;
+	if (GetSaveFileName(&ofn))
+		fileNameStr = fileName;
+
+	if (fileNameStr.find(".save") != std::string::npos) {	// Usuniêcie potencjalnej koñcóki .save
+		fileNameStr.resize(fileNameStr.length() - 5);
+	}
+
+	for (int i = 0; i < 4; i++) {
+		if (fileNameStr[fileNameStr.length() - 1 - i]) {
+			
+		}
+	}
+
+	return fileNameStr;
+}
+
+std::string loadAs(HWND owner) {
+	OPENFILENAME ofn;
+	char fileName[MAX_PATH] = "";
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = owner;
+	ofn.lpstrFilter = "Planowanie\0*.save\0";
+	ofn.lpstrFile = fileName;
+	ofn.nMaxFile = MAX_PATH;
+	ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_NOCHANGEDIR | MB_APPLMODAL | MB_TOPMOST;
+	ofn.lpstrDefExt = "";
+	ofn.lpstrInitialDir = "";
+
+	std::string fileNameStr;
+	if (GetOpenFileName(&ofn))
+		fileNameStr = fileName;
+
+	return fileNameStr;
+}
+
 bool GameController::prepareGame() {
 	if (settings->newGame == true) {//Przystosowanie gry jeœli jest to NowaGra
 		game->player.clear();
@@ -33,18 +83,36 @@ bool GameController::prepareGame() {
 		game->player.resize(gameData.playersSettings->size());
 		settings->newGame = false;
 	}
-	else if (settings->load == true) {
-		std::ifstream file(settings->loadPath.toAnsiString(), std::ios_base::binary);
-		file >> gameData;
-		file.close();
-		settings->load = false;
+	else if (settings->load == true) { 
+		std::string loadPath = loadAs(settings->window->getSystemHandle());
+		if (loadPath.length() == 0) {
+			settings->load = false;
+			return false;
+		}
+		else {
+			std::ifstream file(loadPath, std::ios_base::binary);
+			file >> gameData;
+			file.close();
+			settings->load = false;
+		}
 	}
 	else if (settings->save == true) {
-		std::ofstream file(settings->loadPath.toAnsiString(), std::ios_base::binary);
-		file << gameData;
-		file.close();
-		settings->save = false;
-		return false;
+		if (game->player[0].getDeckSize() == 0) {
+			settings->save = false;
+			return false;
+		}
+		std::string  savePath = saveAs(settings->window->getSystemHandle());
+		if (savePath.length() == 0) {
+			settings->save = false;
+			return false;
+		}
+		else {
+			std::ofstream file(savePath + ".save", std::ios_base::binary);
+			file << gameData;
+			file.close();
+			settings->save = false;
+			return false;
+		}
 	}
 	return true;
 }

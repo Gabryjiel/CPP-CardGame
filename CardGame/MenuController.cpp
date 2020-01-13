@@ -55,6 +55,7 @@ int MenuController::start() {
 			case 6: settings->window->create(sf::VideoMode::getFullscreenModes()[0], "Planowanie", sf::Style::Fullscreen); break;
 			default: settings->window->create(sf::VideoMode(1280, 720), "Planowanie", sf::Style::Close);
 			}
+			settings->window->requestFocus();
 			view->drawScene("ResolutionMenu");
 			view->display();
 		}

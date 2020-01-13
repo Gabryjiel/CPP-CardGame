@@ -484,7 +484,7 @@ void GameView::drawDeclaration() {
 
 void GameView::drawScoreboard() {
 	sf::RectangleShape background, vLine, hLine;
-	background.setSize(sf::Vector2f(settings->window->getSize().x * 0.8f, settings->window->getSize().y * 0.8f));
+	background.setSize(sf::Vector2f(settings->window->getSize().x * 0.9f, settings->window->getSize().y * 0.9f));
 	background.setPosition(settings->window->getSize().x / 2 - background.getGlobalBounds().width / 2, settings->window->getSize().y / 2 - background.getGlobalBounds().height / 2);
 	background.setFillColor(sf::Color(255, 255, 255, 200));
 	background.setOutlineColor(sf::Color::Black);
@@ -499,7 +499,7 @@ void GameView::drawScoreboard() {
 	Button text;
 	text.setFormating(1, 1);
 	text.setBackgroundColor(sf::Color(255, 255, 255, 0));
-	text.setSize(background.getGlobalBounds().height / 20, background.getGlobalBounds().width / (1 + settings->players.size()));
+	text.setSize(background.getGlobalBounds().height / 24, background.getGlobalBounds().width / (1 + settings->players.size()));
 	text.setTextColour(sf::Color::Black);
 
 	draw(background);
@@ -528,18 +528,18 @@ void GameView::drawScoreboard() {
 	hLine.setSize(sf::Vector2f(hLine.getSize().x, 1));
 
 	for (int i = 0; i < numberOfPlayers; i++) {
-		text.setTextSize(30);
+		//text.setTextSize(20);
 		text.setText("G" + std::to_string(i));
 		text.setPosition(background.getPosition().x + (i + 1) * text.getGlobalBounds().width, background.getPosition().y);
 		vLine.setPosition(background.getPosition().x + (i + 1) * text.getGlobalBounds().width, background.getPosition().y);
 		draw(vLine);
 		draw(text);
+		//text.setTextSize(20);
 		for (int j = 0; j < settings->rounds.size(); j++) {
 			if (i == 0) {
 				hLine.setPosition(background.getPosition().x, background.getPosition().y + (j + 1) * text.getGlobalBounds().height);
 				draw(hLine);
 			}
-			text.setTextSize(20);
 			text.setSize(background.getGlobalBounds().height / 20, background.getGlobalBounds().width / (1 + settings->players.size()));
 			int points = player->at(i).getPoints(j);
 			

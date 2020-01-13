@@ -51,11 +51,13 @@ std::istream& operator>>(std::istream& input, SaveData& save){
 	bool exit = true;
 
 	int i = 0;
-	save.players->clear();
+	if(save.players->size() > 0)
+		save.players->clear();
 	while (exit) {	//Wczytanie kart graczy
 		while (true) {
 			input >> temp;
-			if (temp == -100) break;
+			if (temp == -100)
+				break;
 			else if (temp == -200) {
 				exit = false;
 				break;

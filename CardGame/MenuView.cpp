@@ -17,8 +17,8 @@ void MenuView::drawScene(sf::String menu) {
 	settings->window->clear(settings->backgroundColour);
 
 	if (menu == "MainMenu") {
-		textTable = { "Szybka gra", L"W³asna gra", "Opcje", L"Wyjœcie", "Kontynuuj", L"Zapisz grê", L"Wczytaj grê" };
-		commandTable = { "QuickGame", "CustomGame", "Options", "CLOSE", "Continue", "SaveGame", "LoadGame" };
+		textTable = { "Szybka gra", L"W³asna gra", "Kontynuuj", L"Zapisz grê", L"Wczytaj grê", "Opcje", L"Wyjœcie" };
+		commandTable = { "QuickGame", "CustomGame", "Continue", "SaveGame", "LoadGame", "Options", "CLOSE" };
 	}
 	else if (menu == "Options") {	
 		textTable = { L"Rozdzielczoœæ", L"Kolor t³a", "Motyw kart" };

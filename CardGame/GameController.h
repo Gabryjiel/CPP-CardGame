@@ -31,7 +31,6 @@ class GameController : public Controller{
 public:
 	GameController(GameSettings& settings);
 	~GameController();
-
 	
 
 	int start();
