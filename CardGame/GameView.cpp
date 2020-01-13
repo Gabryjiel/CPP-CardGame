@@ -528,19 +528,16 @@ void GameView::drawScoreboard() {
 	hLine.setSize(sf::Vector2f(hLine.getSize().x, 1));
 
 	for (int i = 0; i < numberOfPlayers; i++) {
-		//text.setTextSize(20);
 		text.setText("G" + std::to_string(i));
 		text.setPosition(background.getPosition().x + (i + 1) * text.getGlobalBounds().width, background.getPosition().y);
 		vLine.setPosition(background.getPosition().x + (i + 1) * text.getGlobalBounds().width, background.getPosition().y);
 		draw(vLine);
 		draw(text);
-		//text.setTextSize(20);
 		for (int j = 0; j < settings->rounds.size(); j++) {
 			if (i == 0) {
 				hLine.setPosition(background.getPosition().x, background.getPosition().y + (j + 1) * text.getGlobalBounds().height);
 				draw(hLine);
 			}
-			text.setSize(background.getGlobalBounds().height / 20, background.getGlobalBounds().width / (1 + settings->players.size()));
 			int points = player->at(i).getPoints(j);
 			
 			if (points == 0) {

@@ -51,8 +51,10 @@ std::istream& operator>>(std::istream& input, SaveData& save){
 	bool exit = true;
 
 	int i = 0;
-	if(save.players->size() > 0)
+	if (save.players->size() > 0) {
 		save.players->clear();
+		save.players->resize(10);
+	}
 	while (exit) {	//Wczytanie kart graczy
 		while (true) {
 			input >> temp;
@@ -63,14 +65,21 @@ std::istream& operator>>(std::istream& input, SaveData& save){
 				break;
 			}
 			else {
-				if (save.players->size() <= i)
-					save.players->resize(save.players->size() + 1);
+				/*if (save.players->size() <= i) {
+					save.players->emplace_back();
+				}*/
+					//save.players->resize(save.players->size() + 1);
 				save.players->at(i).addCard(temp);
 			}
 		}
 		i++;
 	}
 	exit = true;
+
+	for (int i = 9; i >= 0; i--) {
+		if (save.players->at(i).getDeckSize() == NULL)
+			save.players->pop_back();
+	}
 
 	for (int i = 0; i < int(save.players->size()); i++) {	//Wczytanie punktów i deklaracji graczy
 		while (true) {

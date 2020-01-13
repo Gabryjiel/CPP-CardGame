@@ -118,9 +118,9 @@ bool GameController::prepareGame() {
 }
 
 int GameController::start() {
-	view->start();
+	
 	if (!prepareGame()) return MAINMENU;
-
+	view->start();
 	for(gameData.roundsPlayed; gameData.roundsPlayed < int(gameData.rounds->size()); gameData.roundsPlayed++){ //Partia
 		game->prepareRound(gameData.rounds->at(gameData.roundsPlayed), settings->newGame);
 
