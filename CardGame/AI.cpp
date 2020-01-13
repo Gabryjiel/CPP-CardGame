@@ -34,9 +34,9 @@ int AI::declare(int playerNr, int aiLevel) {
 		}
 	}
 	if ((10 - (aiLevel % 100)) <= int(declaration * 10) % 10)
-		return ceil(declaration);
+		return int(ceil(declaration));
 	else
-		return floor(declaration);
+		return int(floor(declaration));
 }
 
 int AI::selectCard(int playerNr, int difficulty) {
@@ -59,7 +59,7 @@ int AI::selectCard(int playerNr, int difficulty) {
 	allowed.resize(deck.size(), false);
 	cardValue.resize(deck.size(), false);
 
-	for (int i = 0; i < deck.size(); i++) {
+	for (int i = 0; i < int(deck.size()); i++) {
 		cardValue[i] = deck[i]->getId();
 		if (deck[i]->getColor() == topColour) {
 			cardValue[i] += 100;
@@ -71,22 +71,22 @@ int AI::selectCard(int playerNr, int difficulty) {
 		}
 	}
 
-	for (int i = 0; i < allowed.size(); i++) {
+	for (int i = 0; i < int(allowed.size()); i++) {
 		if (topColour == -1 || deck[i]->getColor() == topColour || (topCCards == 0 && (triumphCCards == 0 || deck[i]->getColor() == triumphColour)) )
 			allowed[i] = true;
 	}
 
 	
-	int cardToThrow = 0, index = 0, value;
+	int cardToThrow = 0, index = 0, value = 0;
 
 	if (player->at(playerNr).getTaken() > player->at(playerNr).getDeclaration()) {
-		for (int i = 0, value = -1; i < deck.size(); i++) {
+		for (int i = 0, value = -1; i < int(deck.size()); i++) {
 			if (cardValue[i] > value && allowed[i] == true)
 				index = i;
 		}
 	}
 	else{
-		for (int i = 0, value = INT16_MAX; i < deck.size(); i++) {
+		for (int i = 0, value = INT16_MAX; i < int(deck.size()); i++) {
 			if ((cardValue[i] < value || value == -1) && allowed[i] == true)
 				index = i;
 		}

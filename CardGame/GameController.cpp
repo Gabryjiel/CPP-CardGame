@@ -169,7 +169,7 @@ int GameController::start() {
 			view->drawScene("Start");
 			view->drawScene("Table");
 			view->display();
-			view->addCommand(sf::FloatRect(0, 0, settings->window->getSize().x, settings->window->getSize().y), "Proceed", selection);
+			view->addCommand(sf::FloatRect(0, 0, float(settings->window->getSize().x), float(settings->window->getSize().y)), "Proceed", selection);
 			if (waitForEvent("Proceed")) return MAINMENU;
 			game->sumUpTable();		
 			gameData.cardsOnTable = 0;
@@ -184,7 +184,7 @@ int GameController::start() {
 	}
 	view->drawScene("Scoreboard");
 	view->display();
-	view->addCommand(sf::FloatRect(0, 0, settings->window->getSize().x, settings->window->getSize().y), "Proceed", selection);
+	view->addCommand(sf::FloatRect(0, 0, float(settings->window->getSize().x), float(settings->window->getSize().y)), "Proceed", selection);
 	if (waitForEvent("Proceed")) return MAINMENU;
 	game->roundWinner = 0;
 	gameData.reset();
@@ -311,7 +311,7 @@ void GameController::interpretEvent() {
 		}
 	}
 	else if (command == "KeyPressed") {
-		if (codes.x == 60 && gameData.roundsPlayed < settings->rounds.size()) {
+		if (codes.x == 60 && gameData.roundsPlayed < int(settings->rounds.size())) {
 			view->drawScene("Start");
 			view->drawScene("Scoreboard");
 			view->display();

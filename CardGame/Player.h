@@ -8,7 +8,6 @@ private:
 
 public:
 	Player();
-	Player(const Player& pattern);
 	~Player();
 
 	int getAI();	//Returns isAI

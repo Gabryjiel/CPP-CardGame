@@ -209,7 +209,7 @@ void MenuController::interpretEvent() {
 	else if (command == "+G") {
 		if (settings->players.size() < 10) {
 			settings->players.push_back(1);
-			for (int i = 0; i < settings->rounds.size(); i++) {
+			for (int i = 0; i < int(settings->rounds.size()); i++) {
 				if (settings->rounds[i] * settings->players.size() > 51) {
 					settings->rounds[i] -= 1;
 					i--;

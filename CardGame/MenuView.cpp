@@ -59,7 +59,7 @@ void MenuView::drawScene(sf::String menu) {
 
 		for (int i = 0; i < int(textTable.size()); i++) {
 			text.setText(textTable[i]);
-			text.setPosition(4, 10 + i * 70);
+			text.setPosition(4, float(10 + i * 70));
 			draw(text);
 			addCommand(text.getGlobalBounds(), commandTable[i], i);
 		}
@@ -84,9 +84,9 @@ void MenuView::drawRoundsMenu() {
 	text.setOutlineThickness(1);
 	text.setTextSize(13);
 	text.setFormating(1, 1);
-	text.setSize(settings->window->getSize().y / 22, 80);
+	text.setSize(float(settings->window->getSize().y) / 22, 80);
 
-	for (int i = 0; i < settings->rounds.size(); i++) {
+	for (int i = 0; i < int(settings->rounds.size()); i++) {
 		text.setBackgroundColor(sf::Color(255, 255, 255, 0));
 		text.setText("Runda " + std::to_string(i + 1));
 		text.setPosition(300, 10 + i * text.getGlobalBounds().height);
@@ -134,7 +134,7 @@ void MenuView::drawPlayersMenu(){
 	text.setFormating(1, 1);
 	text.setSize(30, 60);
 
-	for (int i = 0; i < settings->players.size(); i++) {
+	for (int i = 0; i < int(settings->players.size()); i++) {
 		text.setBackgroundColor(sf::Color(255, 255, 255, 0));
 		text.setText("Gracz " + std::to_string(i));
 		text.setPosition(300, 10 + i * text.getGlobalBounds().height);

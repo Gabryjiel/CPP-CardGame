@@ -7,21 +7,12 @@ Game::Game(int nOP) {
 	this->deck.resize(numberOfPlayers);
 	ai = new AI(&player, &triumph, &deck);
 	roundWinner = 0;
-	console2 = new ConsoleView(&player, &deck, triumph, nOP);
+	round = 0;
 }
 
 Game::~Game(){
 	player.clear();
 	delete ai;
-}
-
-void Game::start() {
-	this->prepareRound(round, true);
-	for (int i = round; i > 0; i--) {
-		this->singleRound();
-		this->sumUpRound();
-	}
-	this->endRound();
 }
 
 void Game::prepareRound(int numberOfCards, bool newGame) {
@@ -45,10 +36,8 @@ void Game::prepareRound(int numberOfCards, bool newGame) {
 		for (int i = 0; i < numberOfPlayers; i++)
 			player[i].sortDeck();
 	}
-	//console2->displayStart();
-	
 
-	for (int i = 0; i < player.size(); i++) {
+	for (int i = 0; i < int(player.size()); i++) {
 		int aiLevel = player[i].getAI();
 		if (!aiLevel)
 			ai->declare(i, aiLevel);
@@ -58,51 +47,6 @@ void Game::prepareRound(int numberOfCards, bool newGame) {
 
 void Game::setDeclaration(int player, int declaration){
 	this->player[player].setDeclaration(declaration);
-}
-
-int Game::cardSelector(int player) {
-	int selection;
-	if (this->player[player].getAI() != 0)
-		selection = ai->selectCard(player, 0);
-	else {
-		bool check;
-		do {
-			check = false;;
-//			selection = console->selectCard(player);
-			selection = 0;
-			if (deck.size() != 0) {
-				int topColor = getDeck()[0]->getColor();
-				if (this->player[player].getDeck()[selection]->getColor() != topColor) {
-					if (!this->player[player].checkForColor(topColor)) {//Brak koloru
-						if (this->player[player].checkForColor(this->triumph->getColor())) {//Jest triumf
-							if (this->player[player].getDeck()[selection]->getColor() != triumph->getColor()) {
-								//ERROR
-								check = true;
-							}
-						}
-					}
-					else {//Jest kolor
-						if (this->player[player].getDeck()[selection]->getColor() != topColor) {
-							//ERROR
-							check = true;
-						}
-					}
-				}
-			}
-		} while (check);
-	}
-	return selection;
-}
-
-void Game::singleRound() {
-	for (int i = roundWinner; getDeckSize() != numberOfPlayers;) {
-		addCard(i, player[i].throwCard(cardSelector(i)));
-//		console->displayStart();
-//		console->displayTable();
-
-		if (i == this->numberOfPlayers - 1) i = 0;
-		else i++;
-		}
 }
 
 void Game::sumUpTable() {
@@ -127,7 +71,6 @@ void Game::sumUpTable() {
 	player[roundWinner].setTaken(player[roundWinner].getTaken() + 1);
 	clearDeck();
 	this->deck.resize(numberOfPlayers);
-//	console->displayWinner(roundWinner);
 }
 
 void Game::sumUpRound(){
@@ -153,14 +96,4 @@ void Game::makeAMove(int player, int card){
 
 int Game::aiCardSelection(int player, int difficulty){
 	return ai->selectCard(player, difficulty);
-}
-
-
-void Game::endRound() {
-//	console->displayResult();
-
-	for (int i = 0; i < numberOfPlayers; i++) {
-		this->player[i].clearDeck();
-	}
-	this->round--;
 }

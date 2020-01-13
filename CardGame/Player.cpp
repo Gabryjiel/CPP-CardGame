@@ -5,13 +5,6 @@ Player::Player() {
 	taken = 0;
 }
 
-Player::Player(const Player& pattern){
-	this->deck = pattern.deck;
-	this->points = pattern.points;
-	this->taken = pattern.taken;
-	this->AI = pattern.AI;
-}
-
 Player::~Player(){}
 
 //Getters

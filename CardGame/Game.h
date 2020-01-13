@@ -1,6 +1,5 @@
 #pragma once
 #include "Player.h"
-#include "ConsoleView.h"
 #include "AI.h"
 
 class Game : public Deck{
@@ -13,7 +12,6 @@ class Game : public Deck{
 
 	std::vector<Player> player;
 	Card* triumph;
-	ConsoleView* console2;
 	AI* ai;
 	
 

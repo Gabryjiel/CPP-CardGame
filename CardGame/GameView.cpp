@@ -112,7 +112,7 @@ void GameView::setPositions() {
 		positions[numberOfPlayers - 1].gap = gap_side_big;
 	}
 	
-	for (int i = ceil((numberOfPlayers - 1) / 2.0f), pom = 1; pom <= temp; i++, pom++) {
+	for (int i = int(ceil((numberOfPlayers - 1) / 2.0f)), pom = 1; pom <= temp; i++, pom++) {
 		if (temp == 1) {
 			positions[i].hand = handPos[6];
 			positions[i].table = tablePos[6];
@@ -174,7 +174,6 @@ void GameView::scaleAllCards() {
 }
 
 void GameView::loadCards() {
-	//1280x720
 	for (int i = 0; i < 52; i++) {
 		sf::String cardname;
 
@@ -216,25 +215,6 @@ void GameView::drawScene(const sf::String mode) {
 		drawScoreboard();
 }
 
-/*
-void GameView::drawScene(const sf::String mode...) {
-
-	for(auto el : va_arg(args, sf::String) ){
-		if (el == "Background")
-			drawBackground();
-		else if (el == "Start")
-			drawStart();
-		else if (el == "Result")
-			drawResult();
-		else if (el == "Declaration")
-			drawDeclaration();
-		else if (el == "Table")
-			drawTable();
-		else if (el == "Display")
-			settings->window->display();
-	}
-}*/
-
 void GameView::drawBackground() {
 	settings->window->clear(sf::Color(settings->backgroundColour));
 }
@@ -261,7 +241,7 @@ bool GameView::allowedCard(int id) {
 		std::vector <Card*> deck = player->at(0).getDeck();
 		
 		int cTopColor = 0, cTriumphColor = 0;
-		for (int x = 0; x < deck.size(); x++) {
+		for (int x = 0; x < int(deck.size()); x++) {
 			if (deck[x]->getColor() == getTopColour()) {
 				cTopColor++;
 			}
@@ -270,7 +250,7 @@ bool GameView::allowedCard(int id) {
 			}
 		}
 
-		for (int x = 0, nrCard = 0; x < deck.size(); x++) {
+		for (int x = 0, nrCard = 0; x < int(deck.size()); x++) {
 			if (cTopColor == 0) {
 				if (cTriumphColor != 0) {
 					if (deck[x]->getColor() != (*triumph)->getColor()) {
@@ -331,7 +311,7 @@ void GameView::drawStart(){
 					}
 					else max++;
 
-					if ((commands.size() == 0 || j != 0) && i == 0 && commands.size() < max && ameno)
+					if ((commands.size() == 0 || j != 0) && i == 0 && int(commands.size()) < max && ameno)
 						addCommand(cards[temp].getSize(), "ThrowCard", j);
 				}
 				draw(cards[temp]);
@@ -379,11 +359,15 @@ int GameView::getBestCard() {
 	int max = -1, maxValue = 0, triumphColour = (*triumph)->getColor();
 	int notNull = 0, topColour = -1;
 	
-	for (int i = 0; i < table->size(); i++)
+	for (int i = 0; i < int(table->size()); i++)
 		if (table->at(i) != NULL) notNull++;
-	if (notNull == 0) topColour == -1;
-	else if (notNull == 1) topColour = getTopColour(1);
-	else topColour = getTopColour();
+
+	if (notNull == 0) 
+		topColour = -1;
+	else if (notNull == 1) 
+		topColour = getTopColour(1);
+	else 
+		topColour = getTopColour();
 
 	for (int i = 0; i < int(table->size()); i++) {
 		Card* temp = table->at(i);
@@ -504,7 +488,7 @@ void GameView::drawScoreboard() {
 
 	draw(background);
 
-	for (int i = 0; i <= settings->rounds.size(); i++) {
+	for (int i = 0; i <= int(settings->rounds.size()); i++) {
 		if (i == 0) {
 			text.setText("Runda");
 			text.setPosition(background.getPosition().x, background.getPosition().y);
@@ -533,7 +517,7 @@ void GameView::drawScoreboard() {
 		vLine.setPosition(background.getPosition().x + (i + 1) * text.getGlobalBounds().width, background.getPosition().y);
 		draw(vLine);
 		draw(text);
-		for (int j = 0; j < settings->rounds.size(); j++) {
+		for (int j = 0; j < int(settings->rounds.size()); j++) {
 			if (i == 0) {
 				hLine.setPosition(background.getPosition().x, background.getPosition().y + (j + 1) * text.getGlobalBounds().height);
 				draw(hLine);

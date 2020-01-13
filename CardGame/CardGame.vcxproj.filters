@@ -88,9 +88,6 @@
     <ClCompile Include="Button.cpp">
       <Filter>View\XOther</Filter>
     </ClCompile>
-    <ClCompile Include="ConsoleView.cpp">
-      <Filter>View\XOther</Filter>
-    </ClCompile>
     <ClCompile Include="SaveData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -144,12 +141,6 @@
     <ClInclude Include="Button.h">
       <Filter>View\XOther</Filter>
     </ClInclude>
-    <ClInclude Include="ConsoleView.h">
-      <Filter>View\XOther</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Resources</Filter>
-    </ClInclude>
     <ClInclude Include="SaveData.h">
       <Filter>View\Headers</Filter>
     </ClInclude>
@@ -164,10 +155,5 @@
     <Image Include="images\cards\2_of_diamonds.png">
       <Filter>Resources\images\cards</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="CardGame.rc">
-      <Filter>Resources</Filter>
-    </ResourceCompile>
   </ItemGroup>
 </Project>
