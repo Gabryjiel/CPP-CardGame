@@ -1,2 +1,2 @@
 # CPP-CardGame
-Card game for university
+Card game for project at university
